@@ -118,12 +118,12 @@ public class HolomonicMain extends OpMode
 
         float gamepad1LeftX = gamepad1.left_stick_x;
         float gamepad1LeftY = gamepad1.left_stick_y;
-        float gamepad1RightX = gamepad1.right_stick_x;
+        float gamepad1RightX = -gamepad1.right_stick_x;
 
-        float FrontLeft = gamepad1LeftX + gamepad1RightX - gamepad1LeftY;
-        float FrontRight = gamepad1LeftX + gamepad1RightX + gamepad1LeftY;
-        float BackRight = gamepad1LeftX - gamepad1RightX + gamepad1LeftY;
-        float BackLeft = gamepad1LeftX - gamepad1RightX - gamepad1LeftY;
+        float FrontLeft = gamepad1LeftX - gamepad1RightX - gamepad1LeftY;
+        float FrontRight = gamepad1LeftX - gamepad1RightX + gamepad1LeftY;
+        float BackRight = gamepad1LeftX + gamepad1RightX + gamepad1LeftY;
+        float BackLeft = gamepad1LeftX + gamepad1RightX - gamepad1LeftY;
 
         FrontRight = Range.clip(FrontRight, -1, 1);
         FrontLeft = Range.clip(FrontLeft, -1, 1);
