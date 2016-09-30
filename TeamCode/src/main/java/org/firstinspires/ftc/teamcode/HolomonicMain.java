@@ -61,10 +61,7 @@ public class HolomonicMain extends OpMode
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor frontRight;
-    private DcMotor frontLeft;
-    private DcMotor backRight;
-    private DcMotor backLeft;
+    RobotHardware robot = new RobotHardware();
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -72,13 +69,7 @@ public class HolomonicMain extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        backRight = hardwareMap.dcMotor.get("backRight");
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        robot.init(hardwareMap);
 
         /* eg: Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
@@ -118,22 +109,22 @@ public class HolomonicMain extends OpMode
 
         float gamepad1LeftX = gamepad1.left_stick_x;
         float gamepad1LeftY = gamepad1.left_stick_y;
-        float gamepad1RightX = -gamepad1.right_stick_x;
+        float gamepad1RightX = gamepad1.right_stick_x;
 
         float FrontLeft = gamepad1LeftY - gamepad1RightX - gamepad1LeftX;
         float FrontRight = gamepad1LeftY - gamepad1RightX + gamepad1LeftX;
         float BackRight = gamepad1LeftY + gamepad1RightX + gamepad1LeftX;
         float BackLeft = gamepad1LeftY + gamepad1RightX - gamepad1LeftX;
-
+        //TODO Test Direction change. If it does not work then re reverse the left side and ass ngative to the leftY
         FrontRight = Range.clip(FrontRight, -1, 1);
         FrontLeft = Range.clip(FrontLeft, -1, 1);
         BackRight = Range.clip(BackRight, -1, 1);
         BackLeft = Range.clip(BackLeft, -1, 1);
 
-        frontRight.setPower(FrontRight);
-        frontLeft.setPower(FrontLeft);
-        backRight.setPower(BackRight);
-        backLeft.setPower(BackLeft);
+        robot.frontRight.setPower(FrontRight);
+        robot.frontLeft.setPower(FrontLeft);
+        robot.backRight.setPower(BackRight);
+        robot.backLeft.setPower(BackLeft);
     }
 
     /*
