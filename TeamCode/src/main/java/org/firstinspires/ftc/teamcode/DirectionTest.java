@@ -85,7 +85,7 @@ public class DirectionTest extends OpMode
                 if(robot.timer.time() > 2)
                 {
                     caseSwitch++;
-                    motor.forward(0);
+                    motor.stop();
                     robot.timer.reset();
                 }
                 break;
@@ -94,7 +94,7 @@ public class DirectionTest extends OpMode
                 if(robot.timer.time() > 2)
                 {
                     caseSwitch++;
-                    motor.backward(0);
+                    motor.stop();
                     robot.timer.reset();
                 }
                 break;
@@ -103,7 +103,7 @@ public class DirectionTest extends OpMode
                 if(robot.timer.time() > 2)
                 {
                     caseSwitch++;
-                    motor.left(0);
+                    motor.stop();
                     robot.timer.reset();
                 }
                 break;
@@ -112,30 +112,26 @@ public class DirectionTest extends OpMode
                 if(robot.timer.time() > 2)
                 {
                     caseSwitch++;
-                    motor.right(0);
+                    motor.stop();
                     robot.timer.reset();
                 }
                 break;
             case 4:
-                motor.clockwise(1);
-                if(robot.timer.time() > 2)
+                if(motor.clockwise(1, 90))
                 {
                     caseSwitch++;
-                    motor.clockwise(0);
                     robot.timer.reset();
                 }
                 break;
             case 5:
-                motor.counterClockwise(1);
-                if(robot.timer.time() > 2)
+                if(motor.counterClockwise(1, 90))
                 {
                     caseSwitch++;
-                    motor.counterClockwise(0);
                     robot.timer.reset();
                 }
                 break;
             default:
-                motor.forward(0);
+                motor.stop();
                 break;
         }
     }
@@ -143,6 +139,7 @@ public class DirectionTest extends OpMode
     @Override
     public void stop()
     {
+        stop();
     }
 
 }
