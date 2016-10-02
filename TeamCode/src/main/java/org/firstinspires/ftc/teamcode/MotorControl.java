@@ -51,11 +51,6 @@ public class MotorControl
     {
         int degreesTurned = 0;
 
-        robot.frontLeft.setPower(-power);
-        robot.frontRight.setPower(power);
-        robot.backLeft.setPower(-power);
-        robot.backRight.setPower(power);
-
         if(robot.gyro.getHeading() >= 180 && robot.gyro.getHeading() <= 360)
         {
             degreesTurned = 360 - robot.gyro.getHeading();
@@ -68,6 +63,15 @@ public class MotorControl
         }
         else
         {
+            power = 1 - (degreesTurned/degrees);
+            if(power < 0.3)
+            {
+                power = 0.3;
+            }
+            robot.frontLeft.setPower(-power);
+            robot.frontRight.setPower(power);
+            robot.backLeft.setPower(-power);
+            robot.backRight.setPower(power);
             return false;
         }
     }
@@ -75,11 +79,6 @@ public class MotorControl
     public boolean clockwise(double power, int degrees)
     {
         int degreesTurned = 0;
-
-        robot.frontLeft.setPower(power);
-        robot.frontRight.setPower(-power);
-        robot.backLeft.setPower(power);
-        robot.backRight.setPower(-power);
 
         if(robot.gyro.getHeading() >= 0 && robot.gyro.getHeading() < 180)
         {
@@ -93,8 +92,18 @@ public class MotorControl
         }
         else
         {
+            power = 1 - (degreesTurned/degrees);
+            if(power < 0.3)
+            {
+                power = 0.3;
+            }
+            robot.frontLeft.setPower(power);
+            robot.frontRight.setPower(-power);
+            robot.backLeft.setPower(power);
+            robot.backRight.setPower(-power);
             return false;
         }
+
     }
 
     public void stop()
