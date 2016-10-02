@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Hardware;
 
 /**
@@ -17,6 +18,7 @@ public class RobotHardware
     public DcMotor backRight = null;
     public DcMotor backLeft = null;
     public ModernRoboticsI2cGyro gyro = null;
+    public ElapsedTime timer = null;
 
     public RobotHardware()
     {
@@ -31,6 +33,8 @@ public class RobotHardware
         backRight = hwMap.dcMotor.get("backRight");
         backLeft = hwMap.dcMotor.get("backLeft");
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
+
+        timer = new ElapsedTime();
 
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
