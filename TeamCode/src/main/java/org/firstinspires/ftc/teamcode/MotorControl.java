@@ -63,10 +63,10 @@ public class MotorControl
         }
         else
         {
-            power = 1 - (degreesTurned/degrees);
-            if(power < 0.3)
+            power = power - power * (degreesTurned/degrees);
+            if(degrees - degreesTurned < 36)
             {
-                power = 0.3;
+                power = 0.05;
             }
             robot.frontLeft.setPower(-power);
             robot.frontRight.setPower(power);
@@ -92,10 +92,10 @@ public class MotorControl
         }
         else
         {
-            power = 1 - (degreesTurned/degrees);
-            if(power < 0.3)
+            power = power - power * (degreesTurned/degrees);
+            if(degrees - degreesTurned < 36)
             {
-                power = 0.3;
+                power = 0.05;
             }
             robot.frontLeft.setPower(power);
             robot.frontRight.setPower(-power);
