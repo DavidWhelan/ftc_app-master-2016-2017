@@ -81,32 +81,20 @@ public class DirectionTest extends OpMode
         switch(caseSwitch)
         {
             case 0:
-                caseSwitch++;
-                break;
-            case 1:
-                caseSwitch++;
-                break;
-            case 2:
-                caseSwitch++;
-                break;
-            case 3:
-                caseSwitch++;
-                break;
-            case 4:
                 if(motor.clockwise(1, 90))
                 {
                     caseSwitch++;
                     robot.timer.reset();
                 }
                 break;
-            case 5:
+            case 1:
                 if(motor.counterClockwise(1, 90))
                 {
                     caseSwitch++;
                     robot.timer.reset();
                 }
                 break;
-            default:
+            case 2:
                 motor.stop();
                 break;
         }
@@ -115,7 +103,7 @@ public class DirectionTest extends OpMode
     @Override
     public void stop()
     {
-        stop();
+
     }
 
 }
