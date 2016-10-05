@@ -95,6 +95,16 @@ public class DirectionTest extends OpMode
                 }
                 break;
             case 2:
+                if(robot.timer.time() > 2)
+                {
+                    motor.forward(5,true);
+                }
+                else
+                {
+                    motor.forward(5,false);
+                }
+                break;
+            case 3:
                 motor.stop();
                 break;
         }
