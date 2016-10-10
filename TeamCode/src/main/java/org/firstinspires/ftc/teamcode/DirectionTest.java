@@ -69,7 +69,7 @@ public class DirectionTest extends OpMode
     @Override
     public void start()
     {
-        robot.timer.reset();
+        //robot.gyro.resetZAxisIntegrator();
     }
 
     /*
@@ -78,36 +78,17 @@ public class DirectionTest extends OpMode
     @Override
     public void loop()
     {
-        switch(caseSwitch)
-        {
-            case 0:
-                if(motor.clockwise(1, 90))
-                {
-                    caseSwitch++;
-                    robot.timer.reset();
-                }
-                break;
-            case 1:
-                if(motor.counterClockwise(1, 90))
-                {
-                    caseSwitch++;
-                    robot.timer.reset();
-                }
-                break;
-            case 2:
-                if(robot.timer.time() > 2)
-                {
-                    motor.forward(5,true);
-                }
-                else
-                {
-                    motor.forward(5,false);
-                }
-                break;
-            case 3:
-                motor.stop();
-                break;
-        }
+        telemetry.addData("Color Left Alpha", "Left Aplpha:" + robot.colorLeft.alpha());
+        telemetry.addData("Color Right Alpha", "Right Alpha:" + robot.colorRight.alpha());
+
+        telemetry.addData("Color Left Red", "Left Red:" + robot.colorLeft.red());
+        telemetry.addData("Color Right Red", "Right Red:" + robot.colorRight.red());
+
+        telemetry.addData("Color Left Blue", "Left Blue:" + robot.colorLeft.blue());
+        telemetry.addData("Color Right Blue", "Right Blue:" + robot.colorRight.blue());
+
+        telemetry.addData("Color Left Green", "Left Green:" + robot.colorLeft.green());
+        telemetry.addData("Color Right Green", "Right Green:" + robot.colorRight.green());
     }
 
     @Override
