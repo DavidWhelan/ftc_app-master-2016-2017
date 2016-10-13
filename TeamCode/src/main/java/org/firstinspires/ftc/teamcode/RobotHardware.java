@@ -24,6 +24,9 @@ public class RobotHardware
     public ModernRoboticsI2cColorSensor colorRight = null;
     public ElapsedTime timer = null;
 
+    public double initLeft;
+    public double initRight;
+
     public RobotHardware()
     {
 
@@ -49,6 +52,9 @@ public class RobotHardware
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        initLeft = colorLeft.alpha();
+        initRight = colorRight.alpha();
 
         gyro.calibrate();
     }

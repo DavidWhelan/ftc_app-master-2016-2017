@@ -8,6 +8,7 @@ public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
     private double driveKp = .0625;
+    private double lightKp = .025;
     private int stoppingDegrees = 90;
     private double stopSpeed = 0.05;
 
@@ -142,5 +143,28 @@ public class MotorControl
         return degreeHeading;
     }
 
+    public void followLine(boolean stop, double power)
+    {
+        double powerLeft;
+        double powerRight;
+        double difference;
+        double colorLeftAlpha = -robot.colorLeft.alpha();
+        double colorRightAlpha = robot.colorRight.alpha();
 
+        if(stop)
+        {
+            stop();
+            return;
+        }
+
+        if(robot.colorLeft.alpha() <= robot.initLeft && robot.colorRight.alpha() <= robot.initRight)
+        {
+            forward(power);
+            return;
+        }
+        difference = (colorLeftAlpha + robot.initLeft)+(colorRightAlpha - robot.initRight);
+        powerLeft = power + (difference * lightKp);
+        powerLeft = power - (difference * lightKp);
+
+    }
 }
