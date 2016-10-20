@@ -4,11 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.Hardware;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
-    private double driveKp = .0625;
-    private double lightKp = .025;
+    private double driveKp = .010;
+    private double lightKp = .004;
     private int stoppingDegrees = 90;
     private double stopSpeed = 0.05;
 
@@ -143,8 +145,9 @@ public class MotorControl
         return degreeHeading;
     }
 
-    public void followLine(boolean stop, double power)
+    public void followLine(boolean stop)
     {
+        double power = 0.2;
         double powerLeft;
         double powerRight;
         double difference;
@@ -157,14 +160,69 @@ public class MotorControl
             return;
         }
 
-        if(robot.colorLeft.alpha() <= robot.initLeft && robot.colorRight.alpha() <= robot.initRight)
+        if(robot.colorLeft.alpha() > 10 && robot.colorRight.alpha() <= 10)
         {
-            forward(power);
+            difference = colorLeftAlpha/5;
+        }
+        else if(robot.colorLeft.alpha() <= 10 && robot.colorRight.alpha() >10)
+        {
+            difference = colorRightAlpha/5;
+        }
+        else
+        {
+            difference = 0;
+        }
+        powerLeft = power + (difference * lightKp);
+        powerRight = power - (difference * lightKp);
+
+        robot.frontLeft.setPower(Range.clip(powerLeft, -1, 1));
+        robot.backLeft.setPower(Range.clip(powerLeft, -1, 1));
+
+        robot.frontRight.setPower(Range.clip(powerRight, -1, 1));
+        robot.backRight.setPower(Range.clip(powerRight, -1, 1));
+    }
+
+    public void followWallRight(double power, double minDist, double maxDist, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
             return;
         }
-        difference = (colorLeftAlpha + robot.initLeft)+(colorRightAlpha - robot.initRight);
-        powerLeft = power + (difference * lightKp);
-        powerLeft = power - (difference * lightKp);
+        //If it constantly zigzags find a way to implement a time/distance so it goes past boundry
+        if(robot.rangeSensor.getDistance(DistanceUnit.CM) < minDist)
+        {
+            backward(power/2);
+        }
+        else if(robot.rangeSensor.getDistance(DistanceUnit.CM) > maxDist)
+        {
+            forward(power/2);
+        }
+        else
+        {
+            right(power);
+        }
+    }
 
+    public void followWallLeft(double power, double minDist, double maxDist, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
+            return;
+        }
+        //If it constantly zigzags find a way to implement a time/distance so it goes past boundry
+        if(robot.rangeSensor.getDistance(DistanceUnit.CM) < minDist)
+        {
+            backward(power/2);
+        }
+        else if(robot.rangeSensor.getDistance(DistanceUnit.CM) > maxDist)
+        {
+            forward(power/2);
+        }
+        else
+        {
+            left(power);
+        }
     }
 }

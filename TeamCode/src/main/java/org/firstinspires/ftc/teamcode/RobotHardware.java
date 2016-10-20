@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,10 +23,8 @@ public class RobotHardware
     public ModernRoboticsI2cGyro gyro = null;
     public ModernRoboticsI2cColorSensor colorLeft = null;
     public ModernRoboticsI2cColorSensor colorRight = null;
+    public ModernRoboticsI2cRangeSensor rangeSensor = null;
     public ElapsedTime timer = null;
-
-    public double initLeft;
-    public double initRight;
 
     public RobotHardware()
     {
@@ -42,6 +41,8 @@ public class RobotHardware
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
         colorLeft = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cLeft");
         colorRight = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cRight");
+        rangeSensor = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range");
+
 
         I2cAddr newAddress = I2cAddr.create8bit(0x42);
         colorLeft.setI2cAddress(newAddress);
@@ -52,9 +53,6 @@ public class RobotHardware
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-
-        initLeft = colorLeft.alpha();
-        initRight = colorRight.alpha();
 
         gyro.calibrate();
     }

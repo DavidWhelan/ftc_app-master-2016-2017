@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name="Direction Test", group="TechHogs")
@@ -47,6 +48,7 @@ public class DirectionTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
+    boolean test = false;
     int caseSwitch = 0;
     @Override
     public void init()
@@ -78,17 +80,9 @@ public class DirectionTest extends OpMode
     @Override
     public void loop()
     {
-        telemetry.addData("Color Left Alpha", "Left Aplpha:" + robot.colorLeft.alpha());
-        telemetry.addData("Color Right Alpha", "Right Alpha:" + robot.colorRight.alpha());
-
-        telemetry.addData("Color Left Red", "Left Red:" + robot.colorLeft.red());
-        telemetry.addData("Color Right Red", "Right Red:" + robot.colorRight.red());
-
-        telemetry.addData("Color Left Blue", "Left Blue:" + robot.colorLeft.blue());
-        telemetry.addData("Color Right Blue", "Right Blue:" + robot.colorRight.blue());
-
-        telemetry.addData("Color Left Green", "Left Green:" + robot.colorLeft.green());
-        telemetry.addData("Color Right Green", "Right Green:" + robot.colorRight.green());
+        telemetry.addData("DistanceCM", "DistanceCM" + robot.rangeSensor.getDistance(DistanceUnit.CM));
+        telemetry.addData("DistanceIN", "DistanceIN" + robot.rangeSensor.getDistance(DistanceUnit.INCH));
+        motor.followWallRight(.5,10,50,false);
     }
 
     @Override
