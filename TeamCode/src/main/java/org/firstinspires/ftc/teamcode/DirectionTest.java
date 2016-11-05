@@ -43,7 +43,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name="Direction Test", group="TechHogs")
-
+@Disabled
 public class DirectionTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
@@ -80,9 +80,7 @@ public class DirectionTest extends OpMode
     @Override
     public void loop()
     {
-        telemetry.addData("DistanceCM", "DistanceCM" + robot.rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.addData("DistanceIN", "DistanceIN" + robot.rangeSensor.getDistance(DistanceUnit.INCH));
-        motor.followWallRight(.5,10,50,false);
+        
     }
 
     @Override

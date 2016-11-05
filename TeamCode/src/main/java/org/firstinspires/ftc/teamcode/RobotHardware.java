@@ -10,9 +10,6 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Hardware;
 
-/**
- * Created by david on 9/30/16.
- */
 public class RobotHardware
 {
     HardwareMap hwMap = null;
@@ -20,9 +17,14 @@ public class RobotHardware
     public DcMotor frontLeft = null;
     public DcMotor backRight = null;
     public DcMotor backLeft = null;
+    public DcMotor sweeper = null;
+    public DcMotor flyWheel = null;
+    public DcMotor rightLifter = null;
+    public DcMotor leftLifter = null;
     public ModernRoboticsI2cGyro gyro = null;
     public ModernRoboticsI2cColorSensor colorLeft = null;
     public ModernRoboticsI2cColorSensor colorRight = null;
+    public ModernRoboticsI2cColorSensor beaconColor = null;
     public ModernRoboticsI2cRangeSensor rangeSensor = null;
     public ElapsedTime timer = null;
 
@@ -38,15 +40,17 @@ public class RobotHardware
         frontLeft = hwMap.dcMotor.get("frontLeft");
         backRight = hwMap.dcMotor.get("backRight");
         backLeft = hwMap.dcMotor.get("backLeft");
+        /*
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
         colorLeft = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cLeft");
         colorRight = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cRight");
         rangeSensor = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range");
 
 
+
         I2cAddr newAddress = I2cAddr.create8bit(0x42);
         colorLeft.setI2cAddress(newAddress);
-
+        */
         timer = new ElapsedTime();
 
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -54,7 +58,7 @@ public class RobotHardware
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        gyro.calibrate();
+        //gyro.calibrate();
     }
 
 }

@@ -41,20 +41,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a PushBot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="Holomonic", group="TechHogs")  // @Autonomous(...) is the other common choice
 public class HolomonicMain extends OpMode
 {
@@ -67,7 +53,8 @@ public class HolomonicMain extends OpMode
      * Code to run ONCE when the driver hits INIT
      */
     @Override
-    public void init() {
+    public void init()
+    {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
 
@@ -89,14 +76,17 @@ public class HolomonicMain extends OpMode
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
     @Override
-    public void init_loop() {
+    public void init_loop()
+    {
+
     }
 
     /*
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-    public void start() {
+    public void start()
+    {
         runtime.reset();
     }
 
@@ -104,16 +94,17 @@ public class HolomonicMain extends OpMode
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
-    public void loop() {
+    public void loop()
+    {
         telemetry.addData("Status", "Running: " + runtime.toString());
 
         float gamepad1LeftX = gamepad1.left_stick_x;
         float gamepad1LeftY = gamepad1.left_stick_y;
         float gamepad1RightX = gamepad1.right_stick_x;
 
-        float FrontLeft = gamepad1LeftY - gamepad1RightX - gamepad1LeftX;
-        float FrontRight = gamepad1LeftY - gamepad1RightX + gamepad1LeftX;
-        float BackRight = gamepad1LeftY + gamepad1RightX + gamepad1LeftX;
+        float FrontLeft = gamepad1LeftY + gamepad1RightX + gamepad1LeftX;
+        float FrontRight = gamepad1LeftY - gamepad1RightX - gamepad1LeftX;
+        float BackRight = gamepad1LeftY - gamepad1RightX + gamepad1LeftX;
         float BackLeft = gamepad1LeftY + gamepad1RightX - gamepad1LeftX;
         //TODO Test Direction change. If it does not work then re reverse the left side and ass ngative to the leftY
         FrontRight = Range.clip(FrontRight, -1, 1);
@@ -131,7 +122,9 @@ public class HolomonicMain extends OpMode
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-    public void stop() {
+    public void stop()
+    {
+
     }
 
 }
