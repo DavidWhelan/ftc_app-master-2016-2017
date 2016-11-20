@@ -42,14 +42,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="Direction Test", group="TechHogs")
-@Disabled
-public class DirectionTest extends OpMode
+@Autonomous(name="Sensor Test", group="TechHogs")
+public class SensorTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
-    boolean test = false;
-    int caseSwitch = 0;
     @Override
     public void init()
     {
@@ -57,30 +54,30 @@ public class DirectionTest extends OpMode
         robot.init(hardwareMap);
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
     @Override
     public void init_loop()
     {
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
     @Override
     public void start()
     {
-        //robot.gyro.resetZAxisIntegrator();
+        robot.gyro.resetZAxisIntegrator();
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop()
     {
-        
+        telemetry.addData("gyro", "Gyro: " + robot.gyro.getHeading());
+        telemetry.addData("cLeft Red", "Color Left Red: " + robot.colorLeft.red());
+        telemetry.addData("cLeft Blue","Color Left Blue: " + robot.colorLeft.blue());
+        telemetry.addData("cLeft Green", "Color Left Green: " + robot.colorLeft.green());
+        telemetry.addData("cLeft Alpha", "Color Left Alpha: " + robot.colorLeft.alpha());
+        telemetry.addData("cRight Red", "Color Right Red: " + robot.colorRight.red());
+        telemetry.addData("cRight Blue","Color Right Blue: " + robot.colorRight.blue());
+        telemetry.addData("cRight Green", "Color Right Green: " + robot.colorRight.green());
+        telemetry.addData("cRight Alpha", "Color Right Alpha: " + robot.colorRight.alpha());
+        telemetry.addData("range", "Range: " + robot.rangeSensor.getDistance(DistanceUnit.CM));
     }
 
     @Override

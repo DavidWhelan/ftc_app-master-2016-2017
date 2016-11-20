@@ -49,6 +49,7 @@ public class HolomonicMain extends OpMode
 
     RobotHardware robot = new RobotHardware();
 
+    int flyPower = 0;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -99,14 +100,14 @@ public class HolomonicMain extends OpMode
         telemetry.addData("Status", "Running: " + runtime.toString());
 
         float gamepad1LeftX = gamepad1.left_stick_x;
-        float gamepad1LeftY = gamepad1.left_stick_y;
+        float gamepad1LeftY = -gamepad1.left_stick_y;
         float gamepad1RightX = gamepad1.right_stick_x;
 
         float FrontLeft = gamepad1LeftY + gamepad1RightX + gamepad1LeftX;
         float FrontRight = gamepad1LeftY - gamepad1RightX - gamepad1LeftX;
         float BackRight = gamepad1LeftY - gamepad1RightX + gamepad1LeftX;
         float BackLeft = gamepad1LeftY + gamepad1RightX - gamepad1LeftX;
-        //TODO Test Direction change. If it does not work then re reverse the left side and ass ngative to the leftY
+
         FrontRight = Range.clip(FrontRight, -1, 1);
         FrontLeft = Range.clip(FrontLeft, -1, 1);
         BackRight = Range.clip(BackRight, -1, 1);
@@ -116,6 +117,11 @@ public class HolomonicMain extends OpMode
         robot.frontLeft.setPower(FrontLeft);
         robot.backRight.setPower(BackRight);
         robot.backLeft.setPower(BackLeft);
+
+        if(gamepad1.a) robot.flyWheel.setPower(0);
+        if(gamepad1.y) robot.flyWheel.setPower(1);
+
+        robot.sweeper.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
     }
 
     /*
