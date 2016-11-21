@@ -12,9 +12,10 @@ public class MotorControl
     private RobotHardware robot = new RobotHardware();
     private double driveKp = .035;
     private double lightKp = .004;
-    private double powerMinmum = 0.75;
+    private double powerMinmum = 0.8;
     public String debug = "";
     public String debug2 = "";
+    public String debug3 = "";
 
     public MotorControl(RobotHardware robot)
     {
@@ -65,7 +66,7 @@ public class MotorControl
         robot.backRight.setPower(powerRight);
     }
 
-    public boolean counterClockwise(double power, double degrees)
+    public boolean counterClockwise(double power, double degrees, ElapsedTime timer)
     {
         int degreesTurned = 0;
 
@@ -75,8 +76,10 @@ public class MotorControl
         }
         if (degreesTurned >= degrees)
         {
+            //robot.gyro.resetZAxisIntegrator();
+            debug = String.valueOf(degreesTurned)  + ":Time:" + timer.time();
             stop();
-            robot.gyro.resetZAxisIntegrator();
+            debug2 = String.valueOf(degreesTurned)  + ":Time:" + timer.time();
             return true;
         }
         else
@@ -93,7 +96,7 @@ public class MotorControl
         }
     }
 
-    public boolean clockwise(double power, double degrees)
+    public boolean clockwise(double power, double degrees, ElapsedTime timer)
     {
         int degreesTurned = 0;
 
@@ -103,14 +106,15 @@ public class MotorControl
         }
         if (degreesTurned >= degrees)
         {
-            robot.gyro.resetZAxisIntegrator();
-            //debug = String.valueOf(degreesTurned) + ":Counter:" + String.valueOf(count) + ":Time:" + timer.time();
+            //robot.gyro.resetZAxisIntegrator();
+
             stop();
-            //debug2 = String.valueOf(degreesTurned) + ":Counter:" + String.valueOf(count) + ":Time:" + timer.time();
+            debug2 = String.valueOf(degreesTurned)  + ":Time:" + timer.time();
             return true;
         }
         else
         {
+            debug = String.valueOf(degreesTurned)  + ":Time:" + timer.time();
             power = power - power * (degreesTurned/degrees);
             if(power < powerMinmum)
             {
@@ -148,7 +152,7 @@ public class MotorControl
         return degreeHeading;
     }
 
-    public void followLine(boolean stop)
+    public boolean followLine(boolean stop)
     {
         double power = 0.2;
         double powerLeft;
@@ -160,7 +164,7 @@ public class MotorControl
         if(stop)
         {
             stop();
-            return;
+            return true;
         }
 
         if(robot.colorLeft.alpha() > 10 && robot.colorRight.alpha() <= 10)
@@ -183,6 +187,8 @@ public class MotorControl
 
         robot.frontRight.setPower(Range.clip(powerRight, -1, 1));
         robot.backRight.setPower(Range.clip(powerRight, -1, 1));
+
+        return false;
     }
 
     public void followWallRight(double power, double minDist, double maxDist, boolean stop)

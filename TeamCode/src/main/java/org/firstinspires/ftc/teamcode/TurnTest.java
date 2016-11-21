@@ -34,18 +34,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="Red Beacon", group="TechHogs")
-public class RedBeaconScore extends OpMode
+@Autonomous(name="Turn Test", group="TechHogs")
+public class TurnTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
-    ElapsedTime timer1 = new ElapsedTime();
-    int caseSwitch = 7;
+    int caseSwitch = 0;
     @Override
     public void init()
     {
@@ -56,7 +54,6 @@ public class RedBeaconScore extends OpMode
     @Override
     public void init_loop()
     {
-
     }
 
     @Override
@@ -72,106 +69,9 @@ public class RedBeaconScore extends OpMode
         {
             case 0:
             {
-                motor.forward(0.3);
-                caseSwitch++;
-                break;
-            }
-
-            case 1:
-            {
-                if(robot.rangeSensor.getDistance(DistanceUnit.CM) > 65)
+                if(motor.clockwise(1, 90, robot.timer))
                 {
-                    motor.stop();
-                    robot.timer.reset();
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 2:
-            {
-                if(robot.timer.time() > 1.5)
-                {
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 3:
-            {
-                if(motor.clockwise(1,90, timer1))
-                {
-                    robot.timer.reset();
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 4:
-            {
-               if(robot.timer.time() > 1.5)
-               {
-                   caseSwitch++;
-               }
-                break;
-            }
-
-            case 5:
-            {
-                motor.backward(0.3);
-                caseSwitch++;
-                break;
-            }
-
-            case 6:
-            {
-                if(robot.rangeSensor.getDistance(DistanceUnit.CM) < 35)
-                {
-                    motor.stop();
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 7:
-            {
-                motor.left(1);
-                caseSwitch++;
-                break;
-            }
-
-            case 8:
-            {
-                if(robot.colorLeft.alpha() > 10)
-                {
-                    caseSwitch++;
-                    motor.stop();
-                }
-                break;
-            }
-
-            case 9:
-            {
-                motor.right(1);
-                caseSwitch++;
-                break;
-            }
-
-            case 10:
-            {
-                if(robot.colorLeft.alpha() < 10)
-                {
-                    caseSwitch++;
-                    motor.stop();
-                }
-                break;
-            }
-
-            case 11:
-            {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) <= 8))
-                {
-                    caseSwitch++;
+                    caseSwitch++ ;
                 }
                 break;
             }
