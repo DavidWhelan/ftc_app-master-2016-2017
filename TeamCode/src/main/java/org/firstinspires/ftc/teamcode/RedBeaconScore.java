@@ -71,7 +71,7 @@ public class RedBeaconScore extends OpMode
         {
             case 0:
             {
-                motor.forward(0.5);
+                motor.forward(0.3);
                 caseSwitch++;
                 break;
             }
@@ -98,7 +98,7 @@ public class RedBeaconScore extends OpMode
 
             case 3:
             {
-                if(motor.clockwise(1, 86))
+                if(motor.clockwise(1, 90))
                 {
                     robot.timer.reset();
                     caseSwitch++;
@@ -117,14 +117,16 @@ public class RedBeaconScore extends OpMode
 
             case 5:
             {
-                motor.backward(0.5);
+                motor.backward(0.3);
+                caseSwitch++;
                 break;
             }
 
             case 6:
             {
-                if(robot.rangeSensor.getDistance(DistanceUnit.CM) < 48)
+                if(robot.rangeSensor.getDistance(DistanceUnit.CM) < 35)
                 {
+                    motor.stop();
                     caseSwitch++;
                 }
                 break;

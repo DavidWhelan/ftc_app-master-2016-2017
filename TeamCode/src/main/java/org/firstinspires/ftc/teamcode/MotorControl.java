@@ -10,9 +10,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
-    private double driveKp = .065;
+    private double driveKp = .035;
     private double lightKp = .004;
-    private double powerMinmum = 0.8;
+    private double powerMinmum = 0.75;
     public String debug = "";
     public String debug2 = "";
 
@@ -34,8 +34,8 @@ public class MotorControl
 
     public void backward(double power)
     {
-        double powerLeft = (Range.clip(power - ((double) decodeHeading() * driveKp), -1, 1));
-        double powerRight= (Range.clip(power + ((double) decodeHeading() * driveKp), -1, 1));
+        double powerLeft = (Range.clip(power + ((double) decodeHeading() * driveKp), -1, 1));
+        double powerRight= (Range.clip(power - ((double) decodeHeading() * driveKp), -1, 1));
 
         robot.frontLeft.setPower(-powerLeft);
         robot.frontRight.setPower(-powerRight);
@@ -76,14 +76,14 @@ public class MotorControl
         if (degreesTurned >= degrees)
         {
             stop();
-            //robot.gyro.resetZAxisIntegrator();
+            robot.gyro.resetZAxisIntegrator();
             return true;
         }
         else
         {
             if(power < powerMinmum)
             {
-                power = .8;
+                power = powerMinmum;
             }
             robot.frontLeft.setPower(-power);
             robot.frontRight.setPower(power);
@@ -103,6 +103,7 @@ public class MotorControl
         }
         if (degreesTurned >= degrees)
         {
+            robot.gyro.resetZAxisIntegrator();
             //debug = String.valueOf(degreesTurned) + ":Counter:" + String.valueOf(count) + ":Time:" + timer.time();
             stop();
             //debug2 = String.valueOf(degreesTurned) + ":Counter:" + String.valueOf(count) + ":Time:" + timer.time();
@@ -113,7 +114,7 @@ public class MotorControl
             power = power - power * (degreesTurned/degrees);
             if(power < powerMinmum)
             {
-                power = .8;
+                power = powerMinmum;
             }
             robot.frontLeft.setPower(power);
             robot.frontRight.setPower(-power);
