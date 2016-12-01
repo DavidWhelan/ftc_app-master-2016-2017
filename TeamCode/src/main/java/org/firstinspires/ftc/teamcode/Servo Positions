@@ -1,0 +1,13 @@
+Button Presser
+    Resting init = 0
+    button press = 1
+
+Robot trajectory
+    init = 70/255
+    back = 255/255
+    forward = 110/255
+
+ Robot Ball Stop
+    init = 240/255
+    stop = 205/255
+    go = 240/255

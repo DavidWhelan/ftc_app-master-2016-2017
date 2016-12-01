@@ -33,16 +33,19 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name="Turn Test", group="TechHogs")
+
 public class TurnTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
+    double time = 0.0;
     int caseSwitch = 0;
     @Override
     public void init()
@@ -54,38 +57,59 @@ public class TurnTest extends OpMode
     @Override
     public void init_loop()
     {
+        robot.initLoop();
     }
 
     @Override
     public void start()
     {
-        robot.gyro.resetZAxisIntegrator();
+        robot.run_using_encoder();
+        robot.setMaxSpeed(1600);
+        robot.timer.reset();
     }
 
     @Override
     public void loop()
     {
-        switch(caseSwitch)
+        switch (caseSwitch)
         {
             case 0:
             {
-                if(motor.clockwise(1, 90, robot.timer))
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                robot.timer.reset();
+                caseSwitch++;
+                break;
+            }
+            case 1:
+            {
+                if(motor.forward(1, robot.timer.time() > 5))
                 {
-                    caseSwitch++ ;
+                    time = robot.timer.time();
+                    caseSwitch++;
                 }
                 break;
             }
         }
-        telemetry.addData("Debug", motor.debug);
-        telemetry.addData("Debug2", motor.debug2);
-        telemetry.addData("Range", robot.rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.addData("Gyro", robot.gyro.getHeading());
+
+        double frontLeft = (double)robot.frontLeft.getCurrentPosition();
+        double frontRight = (double)robot.frontRight.getCurrentPosition();
+        double backLeft = (double)robot.backLeft.getCurrentPosition();
+        double backRight = (double)robot.backRight.getCurrentPosition();
+
+        telemetry.addData("FrontRight", frontRight);
+        telemetry.addData("FrontLeft", frontLeft);
+
+        telemetry.addData("BackRight", backRight);
+        telemetry.addData("BackLeft", backLeft);
+
+        telemetry.addData("Mode", robot.frontLeft.getMode());
     }
 
     @Override
     public void stop()
     {
-
+        robot.navx_device.close();
     }
 
 }

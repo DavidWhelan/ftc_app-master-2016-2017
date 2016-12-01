@@ -44,13 +44,14 @@ public class RedBeaconScore extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
-    ElapsedTime timer1 = new ElapsedTime();
-    int caseSwitch = 7;
+    ElapsedTime caseTimer = new ElapsedTime();
+    int caseSwitch = 0;
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
+        motor.heading = 0;
     }
 
     @Override
@@ -62,7 +63,9 @@ public class RedBeaconScore extends OpMode
     @Override
     public void start()
     {
-        robot.gyro.resetZAxisIntegrator();
+        robot.run_using_encoder();
+        robot.setMaxSpeed(2400);
+        robot.navx_device.zeroYaw();
     }
 
     @Override
@@ -72,17 +75,18 @@ public class RedBeaconScore extends OpMode
         {
             case 0:
             {
-                motor.forward(0.3);
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
                 caseSwitch++;
                 break;
             }
 
             case 1:
             {
-                if(robot.rangeSensor.getDistance(DistanceUnit.CM) > 65)
+                if(motor.driveWithEncoder(6, 1, "b"))
                 {
-                    motor.stop();
-                    robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
@@ -90,18 +94,16 @@ public class RedBeaconScore extends OpMode
 
             case 2:
             {
-                if(robot.timer.time() > 1.5)
-                {
-                    caseSwitch++;
-                }
+                robot.setTurnPid();
+                motor.setPidDegrees(-45);
+                caseSwitch++;
                 break;
             }
 
             case 3:
             {
-                if(motor.clockwise(1,90, timer1))
+                if(motor.turn())
                 {
-                    robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
@@ -109,83 +111,193 @@ public class RedBeaconScore extends OpMode
 
             case 4:
             {
-               if(robot.timer.time() > 1.5)
-               {
-                   caseSwitch++;
-               }
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
+                caseSwitch++;
                 break;
             }
 
             case 5:
             {
-                motor.backward(0.3);
-                caseSwitch++;
+                if(motor.driveWithEncoder(38, 1, "b"))
+                {
+                    caseSwitch++;
+                }
                 break;
             }
 
             case 6:
             {
-                if(robot.rangeSensor.getDistance(DistanceUnit.CM) < 35)
-                {
-                    motor.stop();
-                    caseSwitch++;
-                }
+                robot.setTurnPid();
+                motor.setPidDegrees(-45);
+                caseSwitch++;
                 break;
             }
 
             case 7:
             {
-                motor.left(1);
-                caseSwitch++;
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
                 break;
             }
 
             case 8:
             {
-                if(robot.colorLeft.alpha() > 10)
-                {
-                    caseSwitch++;
-                    motor.stop();
-                }
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
                 break;
             }
 
             case 9:
             {
-                motor.right(1);
-                caseSwitch++;
+                if(motor.backward(1, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 26))
+                {
+                    caseSwitch++;
+                }
                 break;
             }
 
             case 10:
             {
-                if(robot.colorLeft.alpha() < 10)
-                {
-                    caseSwitch++;
-                    motor.stop();
-                }
+                robot.setSlidePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
                 break;
             }
 
             case 11:
             {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) <= 8))
+                if(motor.followWallLeft(1, 5, 26, robot.colorRight.alpha() > 10))
                 {
                     caseSwitch++;
                 }
                 break;
             }
+
+            case 12:
+            {
+                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.INCH) < 5 ))
+                {
+                    robot.timer.reset();
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 13:
+            {
+                robot.setTurnPid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 14:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 15:
+            {
+                if(robot.beaconColor.red() > robot.beaconColor.blue())
+                {
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    caseSwitch = 16;
+                }
+                else
+                {
+                    robot.timer.reset();
+                    caseSwitch = 17;
+                }
+                robot.timer.reset();
+                break;
+            }
+//TODO If changing case statement number change these absolute changes
+            case 16:
+            {
+                if(motor.backward(.2, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 2 ) && robot.timer.time() > 1.5)
+                {
+                    caseSwitch = 18;
+                }
+                break;
+            }
+
+            case 17:
+            {
+                robot.setButtonPress();
+                if(robot.timer.time() > 1.5)
+                {
+                    caseSwitch = 18;
+                }
+                break;
+            }
+
+            case 18:
+            {
+                robot.setButtonInit();
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 19:
+            {
+                if(motor.forward(.5,robot.rangeSensor.getDistance(DistanceUnit.INCH) > 17))
+                {
+                    robot.setAngleBackward();
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 20:
+            {
+                robot.flyWheel.setPower(1);
+                robot.timer.reset();
+                caseSwitch++;
+                break;
+            }
+
+            case 21:
+            {
+                if(robot.timer.time() > 4 )
+                {
+                    robot.sweeper.setPower(1);
+                    robot.timer.reset();
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 22:
+            {
+                if(robot.timer.time() > 15)
+                {
+                    robot.flyWheel.setPower(0);
+                    robot.sweeper.setPower(0);
+                    caseSwitch++;
+                }
+                break;
+            }
+
         }
-        telemetry.addData("Debug", motor.debug);
-        telemetry.addData("Debug2", motor.debug2);
-        telemetry.addData("Range", robot.rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.addData("Gyro", robot.gyro.getHeading());
     }
 
     @Override
     public void stop()
     {
-
+        robot.navx_device.close();
     }
 
 }

@@ -10,17 +10,312 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
-    private double driveKp = .035;
-    private double lightKp = .004;
-    private double powerMinmum = 0.8;
     public String debug = "";
     public String debug2 = "";
     public String debug3 = "";
+    public double heading = 0.0;
+    public double lightKp = 0.07;
+
+    public double[] storedPower ={.5, .5, .5, .5,};
 
     public MotorControl(RobotHardware robot)
     {
         this.robot = robot;
     }
+
+    public boolean turn ()
+    {
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                stop();
+                if(robot.timer.time()>.5)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(output);
+                robot.backLeft.setPower(output);
+                robot.frontRight.setPower(-output);
+                robot.backRight.setPower(-output);
+                robot.timer.reset();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean freezeTurn ()
+    {
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                stop();
+                if(robot.timer.time()>.5)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(0);
+                robot.backLeft.setPower(0);
+                robot.frontRight.setPower(-output);
+                robot.backRight.setPower(-output);
+                robot.timer.reset();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean forward(double power, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
+            return true;
+        }
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                robot.frontLeft.setPower(power);
+                robot.backLeft.setPower(power);
+                robot.frontRight.setPower(power);
+                robot.backRight.setPower(power);
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(power + output);
+                robot.backLeft.setPower(power + output);
+                robot.frontRight.setPower(power - output);
+                robot.backRight.setPower(power - output);
+            }
+        }
+        return false;
+    }
+
+    public boolean backward(double power, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
+            return true;
+        }
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                robot.frontLeft.setPower(-power);
+                robot.backLeft.setPower(-power);
+                robot.frontRight.setPower(-power);
+                robot.backRight.setPower(-power);
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(-power + output);
+                robot.backLeft.setPower(-power + output);
+                robot.frontRight.setPower(-power - output);
+                robot.backRight.setPower(-power - output);
+            }
+        }
+        return false;
+    }
+
+    public boolean left(double power, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
+            return true;
+        }
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                robot.frontLeft.setPower(power);
+                robot.backLeft.setPower(-power);
+                robot.frontRight.setPower(-power);
+                robot.backRight.setPower(power);
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(power + output);
+                robot.backLeft.setPower(-power + output);
+                robot.frontRight.setPower(-power - output);
+                robot.backRight.setPower(power - output);
+            }
+        }
+        return false;
+    }
+
+    public boolean right(double power, boolean stop)
+    {
+        if(stop)
+        {
+            stop();
+            return true;
+        }
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                robot.frontLeft.setPower(-power);
+                robot.backLeft.setPower(power);
+                robot.frontRight.setPower(power);
+                robot.backRight.setPower(-power);
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(-power + output);
+                robot.backLeft.setPower(power + output);
+                robot.frontRight.setPower(power - output);
+                robot.backRight.setPower(-power - output);
+            }
+        }
+        return false;
+    }
+
+    public boolean followLine(boolean stop)
+    {
+        double power = 0.4;
+        double powerLeft;
+        double powerRight;
+        double difference;
+        double colorLeftAlpha = -robot.colorLeft.alpha();
+        double colorRightAlpha = robot.colorRight.alpha();
+
+        if(stop)
+        {
+            stop();
+            return true;
+        }
+
+        if(robot.colorLeft.alpha() > 10 && robot.colorRight.alpha() <= 10)
+        {
+            difference = colorLeftAlpha/5;
+        }
+        else if(robot.colorLeft.alpha() <= 10 && robot.colorRight.alpha() >10)
+        {
+            difference = colorRightAlpha/5;
+        }
+        else
+        {
+            difference = 0;
+        }
+        powerLeft = power + (difference * lightKp);
+        powerRight = power - (difference * lightKp);
+
+        robot.frontLeft.setPower(Range.clip(-powerRight, -1, 1));
+        robot.backLeft.setPower(Range.clip(-powerRight, -1, 1));
+
+        robot.frontRight.setPower(Range.clip(-powerLeft, -1, 1));
+        robot.backRight.setPower(Range.clip(-powerLeft, -1, 1));
+
+        return false;
+    }
+
+    public boolean driveWithEncoder(double distance, double power, String direction)
+    {
+        if(direction.equals("f"))
+        {
+            forward(power, false);
+        }
+        else
+        {
+            backward(power, false);
+        }
+        double ticksNeeded = distance * robot.TICKS;
+        if(Math.abs(robot.frontRight.getCurrentPosition()) > ticksNeeded)
+        {
+            stop();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean followWallRight(double power, double minDist, double maxDist, boolean stop)
+    {
+        //If it constantly zigzags find a way to implement a time/distance so it goes past boundry
+        if(robot.rangeSensor.getDistance(DistanceUnit.INCH) < minDist)
+        {
+            forward(.5, stop);
+
+        }
+        else if(robot.rangeSensor.getDistance(DistanceUnit.INCH) > maxDist)
+        {
+            backward(.5, stop);
+        }
+        else
+        {
+            right(power, stop);
+        }
+        return stop;
+    }
+
+    public boolean followWallLeft(double power, double minDist, double maxDist, boolean stop)
+    {
+        //If it constantly zigzags find a way to implement a time/distance so it goes past boundry
+        if(robot.rangeSensor.getDistance(DistanceUnit.INCH) < minDist)
+        {
+            forward(.5, stop);
+        }
+        else if(robot.rangeSensor.getDistance(DistanceUnit.INCH) > maxDist)
+        {
+            backward(.5, stop);
+        }
+        else
+        {
+            left(power, stop);
+        }
+        return stop;
+    }
+
+
+    public double limit(double a)
+    {
+        return Math.min(Math.max(a, robot.MIN_MOTOR_OUTPUT_VALUE), robot.MAX_MOTOR_OUTPUT_VALUE);
+    }
+
+    public void stop()
+    {
+        robot.frontLeft.setPower(0);
+        robot.backLeft.setPower(0);
+        robot.frontRight.setPower(0);
+        robot.backRight.setPower(0);
+    }
+
+    public void setPidDegrees(double point)
+    {
+        robot.yawPIDController.setSetpoint(point + heading);
+        heading += point;
+    }
+
+    public void setTargetEncoder(int pos)
+    {
+        robot.frontLeft.setTargetPosition(pos);
+        robot.backLeft.setTargetPosition(pos);
+        robot.frontRight.setTargetPosition(pos);
+        robot.backRight.setTargetPosition(pos);
+    }
+
+
+
+}
+    /*
     //Note that the power left and right is relative to the side the robot is moving. Look that direction and you know left and right
     public void forward(double power)
     {
@@ -234,4 +529,4 @@ public class MotorControl
             left(power);
         }
     }
-}
+    */

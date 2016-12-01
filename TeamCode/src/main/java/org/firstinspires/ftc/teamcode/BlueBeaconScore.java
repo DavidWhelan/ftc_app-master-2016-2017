@@ -33,65 +33,118 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-
-@Autonomous(name="Sensor Test", group="TechHogs")
-public class SensorTest extends OpMode
+@Autonomous(name="Blue Beacon", group="TechHogs")
+public class BlueBeaconScore extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
+    ElapsedTime caseTimer = new ElapsedTime();
+    int caseSwitch = 0;
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
+        motor.heading = 0;
     }
 
     @Override
     public void init_loop()
     {
+
     }
 
     @Override
     public void start()
     {
-        //robot.gyro.resetZAxisIntegrator();
+        robot.run_using_encoder();
+        robot.setMaxSpeed(2400);
+        robot.navx_device.zeroYaw();
     }
 
     @Override
     public void loop()
     {
-        //telemetry.addData("gyro", "Gyro: " + robot.gyro.getHeading());
-        telemetry.addData("cLeft Red", "Color Left Red: " + robot.colorLeft.red());
-        telemetry.addData("cLeft Blue","Color Left Blue: " + robot.colorLeft.blue());
-        telemetry.addData("cLeft Green", "Color Left Green: " + robot.colorLeft.green());
-        telemetry.addData("cLeft Alpha", "Color Left Alpha: " + robot.colorLeft.alpha());
-        telemetry.addData("cRight Red", "Color Right Red: " + robot.colorRight.red());
-        telemetry.addData("cRight Blue","Color Right Blue: " + robot.colorRight.blue());
-        telemetry.addData("cRight Green", "Color Right Green: " + robot.colorRight.green());
-        telemetry.addData("cRight Alpha", "Color Right Alpha: " + robot.colorRight.alpha());
-        telemetry.addData("range", "Range: " + robot.rangeSensor.getDistance(DistanceUnit.CM));
+        switch(caseSwitch)
+        {
+            case 1:
+            {
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
 
-        telemetry.addData("Beacon Red", robot.beaconColor.red());
-        telemetry.addData("Beacon Blue", robot.beaconColor.blue());
-        telemetry.addData("Beacon Green", robot.beaconColor.green());
-        telemetry.addData("Beacon Alpha", robot.beaconColor.alpha());
+            case 2:
+            {
+                if(motor.driveWithEncoder(7, 1, "b"))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
 
-        telemetry.addData("Gyro", robot.navx_device.getYaw());
+            case 3:
+            {
+                robot.setTurnPid();
+                motor.setPidDegrees(40);
+                caseSwitch++;
+                break;
+            }
 
+            case 4:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 5:
+            {
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 6:
+            {
+                if(motor.driveWithEncoder(90.5, 1, "b"))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 7:
+            {
+                robot.setTurnPid();
+                motor.setPidDegrees(-40);
+                caseSwitch++;
+                break;
+            }
+
+            case 8:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+        }
     }
 
     @Override
     public void stop()
     {
-
+        robot.navx_device.close();
     }
 
 }

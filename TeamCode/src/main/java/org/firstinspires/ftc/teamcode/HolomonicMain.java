@@ -44,51 +44,27 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Holomonic", group="TechHogs")  // @Autonomous(...) is the other common choice
 public class HolomonicMain extends OpMode
 {
-    /* Declare OpMode members. */
-    private ElapsedTime runtime = new ElapsedTime();
 
     RobotHardware robot = new RobotHardware();
 
-    int flyPower = 0;
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
-
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
-        // leftMotor  = hardwareMap.dcMotor.get("left motor");
-        // rightMotor = hardwareMap.dcMotor.get("right motor");
-
-        // eg: Set the drive motor directions:
-        // Reverse the motor that runs backwards when connected directly to the battery
-        // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        //  rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        // telemetry.addData("Status", "Initialized");
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
     @Override
     public void init_loop()
     {
 
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
     @Override
     public void start()
     {
-        runtime.reset();
+        robot.run_using_encoder();
+        robot.setMaxSpeed(3500);
     }
 
     /*
@@ -97,9 +73,8 @@ public class HolomonicMain extends OpMode
     @Override
     public void loop()
     {
-        telemetry.addData("Status", "Running: " + runtime.toString());
 
-        float gamepad1LeftX = gamepad1.left_stick_x;
+        float gamepad1LeftX = -gamepad1.left_stick_x;
         float gamepad1LeftY = -gamepad1.left_stick_y;
         float gamepad1RightX = gamepad1.right_stick_x;
 
@@ -118,10 +93,38 @@ public class HolomonicMain extends OpMode
         robot.backRight.setPower(BackRight);
         robot.backLeft.setPower(BackLeft);
 
-        if(gamepad1.a) robot.flyWheel.setPower(0);
-        if(gamepad1.y) robot.flyWheel.setPower(1);
-
         robot.sweeper.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
+
+        if(gamepad1.right_bumper)
+        {
+            robot.lifter.setPower(1);
+        }
+        else if(gamepad1.left_bumper)
+        {
+            robot.lifter.setPower(-1);
+        }
+        else
+        {
+            robot.lifter.setPower(0);
+        }
+
+        //******************************************************************************************
+
+
+        if(gamepad2.a) robot.flyWheel.setPower(0);
+        if(gamepad2.y) robot.flyWheel.setPower(1);
+
+        if(gamepad2.x) robot.setButtonInit();
+        if(gamepad2.b) robot.setButtonPress();
+
+        if(gamepad2.dpad_up) robot.setAngleBackward();
+        if(gamepad2.dpad_down) robot.setAngleForward();
+
+        //apply gamepad 2 servo for fly wheel
+
+        //apply for trajectory change
+
+        //apply for button pusher servo
     }
 
     /*
@@ -130,7 +133,7 @@ public class HolomonicMain extends OpMode
     @Override
     public void stop()
     {
-
+        robot.navx_device.close();
     }
 
 }
