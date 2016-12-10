@@ -14,7 +14,7 @@ public class MotorControl
     public String debug2 = "";
     public String debug3 = "";
     public double heading = 0.0;
-    public double lightKp = 0.07;
+    public double lightKp = 0.01;
 
     public double[] storedPower ={.5, .5, .5, .5,};
 
@@ -153,9 +153,9 @@ public class MotorControl
             {
                 double output = robot.yawPIDResult.getOutput();
                 robot.frontLeft.setPower(power + output);
-                robot.backLeft.setPower(-power + output);
+                robot.backLeft.setPower((-power + output + .2));
                 robot.frontRight.setPower(-power - output);
-                robot.backRight.setPower(power - output);
+                robot.backRight.setPower((power - output + .2));
             }
         }
         return false;
@@ -181,9 +181,9 @@ public class MotorControl
             {
                 double output = robot.yawPIDResult.getOutput();
                 robot.frontLeft.setPower(-power + output);
-                robot.backLeft.setPower(power + output);
+                robot.backLeft.setPower(power + output + .2);
                 robot.frontRight.setPower(power - output);
-                robot.backRight.setPower(-power - output);
+                robot.backRight.setPower(-power - output + .2);
             }
         }
         return false;
@@ -191,7 +191,7 @@ public class MotorControl
 
     public boolean followLine(boolean stop)
     {
-        double power = 0.4;
+        double power = 0.3;
         double powerLeft;
         double powerRight;
         double difference;

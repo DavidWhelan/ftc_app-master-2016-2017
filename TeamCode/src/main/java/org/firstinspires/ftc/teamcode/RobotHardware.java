@@ -26,7 +26,8 @@ public class RobotHardware
 
     public Servo angleAdjust = null;
     public Servo feedControl = null;
-    public Servo buttonPush = null;
+    public Servo buttonPushRight = null;
+    public Servo buttonPushLeft = null;
 
     public ModernRoboticsI2cColorSensor colorLeft = null;
     public ModernRoboticsI2cColorSensor colorRight = null;
@@ -47,11 +48,11 @@ public class RobotHardware
 
     private final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
 
-    private final double TOLERANCE_DEGREES = 1.0;
+    public double TOLERANCE_DEGREES = 1.0;
     public final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
     public final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
-    private final double TURN_YAW_PID_P = 0.16; //0.075
+    private final double TURN_YAW_PID_P = 0.1; //0.075
     private final double TURN_YAW_PID_I = 0.0; //0.003
     private final double TURN_YAW_PID_D = 0.4;//0.02
 
@@ -59,9 +60,9 @@ public class RobotHardware
     private final double DRIVE_YAW_PID_I = 0.0;
     private final double DRIVE_YAW_PID_D = 0.0;
 
-    private final double SLIDE_YAW_PID_P = 0.08;
+    private final double SLIDE_YAW_PID_P = 0.04;
     private final double SLIDE_YAW_PID_I = 0.0;
-    private final double SLIDE_YAW_PID_D = 0.2;
+    private final double SLIDE_YAW_PID_D = 0.2 ;
 
     public navXPIDController.PIDResult yawPIDResult;
 
@@ -84,7 +85,8 @@ public class RobotHardware
         lifter = hwMap.dcMotor.get("lifter");
 
         feedControl = hwMap.servo.get("feed");
-        buttonPush = hwMap.servo.get("buttonPush");
+        buttonPushRight = hwMap.servo.get("buttonPushRight");
+        buttonPushLeft = hwMap.servo.get("buttonPushLeft");
         angleAdjust = hwMap.servo.get("angle");
 
         colorLeft = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cLeft");
@@ -120,9 +122,17 @@ public class RobotHardware
 
         stop_and_reset_encoder();
 
-        setButtonInit();
+        flyWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //TODO set flyWheel max
+        flyWheel.setMaxSpeed(2500);
+
+        setButtonRightInit();
+        setButtonLeftInit();
         setAngleInit();
-        setFeedInit();
+        //setFeedInit();
 
         //******************************************************************************************
 
@@ -160,6 +170,7 @@ public class RobotHardware
 
     public void setDrivePid()
     {
+        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, 1);
         yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, TOLERANCE_DEGREES);
         yawPIDController.setPID(DRIVE_YAW_PID_P, DRIVE_YAW_PID_I, DRIVE_YAW_PID_D);
     }
@@ -227,29 +238,52 @@ public class RobotHardware
     }
 
 
-    public void setButtonInit()
+    public void setButtonRightInit()
     {
-        buttonPush.setPosition(0);
+        buttonPushRight.setPosition(0);
     }
 
-    public void setButtonPress()
+    public void setButtonRightPress()
     {
-        buttonPush.setPosition(1);
+        buttonPushRight.setPosition(1);
     }
 
+
+    public void setButtonLeftInit()
+    {
+        buttonPushLeft.setPosition(1);
+    }
+
+    public void setButtonLeftPress()
+    {
+        buttonPushLeft.setPosition(0);
+    }
+
+    public void setButtonLeftColorRead()
+    {
+        buttonPushLeft.setPosition(.48);
+    }
+
+
+    //TODO set these to right values
 
     public void setAngleInit()
     {
-        angleAdjust.setPosition(.27);
+        angleAdjust.setPosition(0);
     }
 
     public void setAngleForward()
     {
-        angleAdjust.setPosition(.43);
+        angleAdjust.setPosition(0);
     }
 
     public void setAngleBackward()
     {
-        angleAdjust.setPosition(.7);
+        angleAdjust.setPosition(.27);
+    }
+
+    public void setAngleButtonPress()
+    {
+        angleAdjust.setPosition(.1);
     }
 }

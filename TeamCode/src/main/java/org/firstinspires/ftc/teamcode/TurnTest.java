@@ -40,7 +40,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name="Turn Test", group="TechHogs")
-
+@Disabled
 public class TurnTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();

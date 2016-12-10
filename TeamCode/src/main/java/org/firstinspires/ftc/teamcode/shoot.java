@@ -34,34 +34,38 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="BeaconPress", group="TechHogs")
-
-public class BeaconPress extends OpMode
+@Autonomous(name="Shoot", group="TechHogs")
+public class Shoot extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
+    ElapsedTime caseTimer = new ElapsedTime();
     int caseSwitch = 0;
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
+        motor.heading = 0;
     }
 
     @Override
     public void init_loop()
     {
-        robot.initLoop();
+
     }
 
     @Override
     public void start()
     {
-
+        robot.run_using_encoder();
+        robot.setMaxSpeed(2400);
+        robot.navx_device.zeroYaw();
     }
 
     @Override
@@ -71,62 +75,71 @@ public class BeaconPress extends OpMode
         {
             case 0:
             {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.INCH) < 7.5))
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 1:
+            {
+                if(motor.driveWithEncoder(32, .5, "f"))
                 {
-                    robot.timer.reset();
-                    robot.setTurnPid();
                     caseSwitch++;
                 }
                 break;
             }
-            case 1:
-            {
-                if(robot.timer.time() > 1.5) caseSwitch++;
-                break;
-            }
+
             case 2:
             {
-                if(robot.colorRight.red() > robot.colorLeft.blue())
-                {
-                    motor.setPidDegrees(15);
-                    caseSwitch = 3;
-                }
-                else
-                {
-                    motor.setPidDegrees(-15);
-                    caseSwitch = 4;
-                }
+                robot.setAngleBackward();
+                robot.flyWheel.setPower(1);
                 robot.timer.reset();
+                caseSwitch++;
                 break;
-
             }
+
             case 3:
             {
-                if(motor.turn())
+                if(robot.timer.time() > 5)
                 {
-                    caseSwitch=5;
+                    robot.sweeper.setPower(1);
+                    robot.timer.reset();
+                    caseSwitch++;
                 }
-
                 break;
             }
 
             case 4:
             {
-                if(motor.turn())
+                if(robot.timer.time() > 10)
                 {
-                    caseSwitch=5;
+                    robot.flyWheel.setPower(0);
+                    robot.sweeper.setPower(0);
+                    caseSwitch++;
                 }
-
                 break;
             }
 
+            case 5:
+            {
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
+                caseSwitch++;
+                break;
+            }
 
+            case 6:
+            {
+                if(motor.driveWithEncoder(15, 1, "f"))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
         }
-        telemetry.addData("Debug", motor.debug);
-        telemetry.addData("Debug2", motor.debug2);
-        telemetry.addData("Range", robot.rangeSensor.getDistance(DistanceUnit.CM));
-        telemetry.addData("Gyro", robot.navx_device.getYaw());
-        telemetry.addData("Case", caseSwitch);
     }
 
     @Override

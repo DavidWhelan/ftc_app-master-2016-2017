@@ -46,6 +46,7 @@ public class HolomonicMain extends OpMode
 {
 
     RobotHardware robot = new RobotHardware();
+    boolean release = false;
 
     @Override
     public void init()
@@ -74,14 +75,14 @@ public class HolomonicMain extends OpMode
     public void loop()
     {
 
-        float gamepad1LeftX = -gamepad1.left_stick_x;
+        float gamepad1LeftX = gamepad1.left_stick_x;
         float gamepad1LeftY = -gamepad1.left_stick_y;
-        float gamepad1RightX = gamepad1.right_stick_x;
+        float gamepad1RightX = -gamepad1.right_stick_x;
 
-        float FrontLeft = gamepad1LeftY + gamepad1RightX + gamepad1LeftX;
-        float FrontRight = gamepad1LeftY - gamepad1RightX - gamepad1LeftX;
-        float BackRight = gamepad1LeftY - gamepad1RightX + gamepad1LeftX;
-        float BackLeft = gamepad1LeftY + gamepad1RightX - gamepad1LeftX;
+        float FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
+        float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+        float BackRight = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
+        float BackLeft = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
         FrontRight = Range.clip(FrontRight, -1, 1);
         FrontLeft = Range.clip(FrontLeft, -1, 1);
@@ -114,8 +115,8 @@ public class HolomonicMain extends OpMode
         if(gamepad2.a) robot.flyWheel.setPower(0);
         if(gamepad2.y) robot.flyWheel.setPower(1);
 
-        if(gamepad2.x) robot.setButtonInit();
-        if(gamepad2.b) robot.setButtonPress();
+        if(gamepad2.x) robot.setButtonRightInit();
+        if(gamepad2.b) robot.setButtonRightPress();
 
         if(gamepad2.dpad_up) robot.setAngleBackward();
         if(gamepad2.dpad_down) robot.setAngleForward();

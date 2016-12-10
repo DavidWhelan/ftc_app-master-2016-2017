@@ -1,6 +1,10 @@
-Button Presser
+Button Presser right
     Resting init = 0
     button press = 1
+
+Button Presser Left
+    init = 255/255
+    press = 20/255
 
 Robot trajectory
     init = 70/255

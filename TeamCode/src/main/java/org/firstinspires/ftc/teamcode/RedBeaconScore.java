@@ -121,7 +121,7 @@ public class RedBeaconScore extends OpMode
 
             case 5:
             {
-                if(motor.driveWithEncoder(38, 1, "b"))
+                if(motor.driveWithEncoder(42, 1, "b"))
                 {
                     caseSwitch++;
                 }
@@ -155,7 +155,7 @@ public class RedBeaconScore extends OpMode
 
             case 9:
             {
-                if(motor.backward(1, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 26))
+                if(motor.backward(1, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 16))
                 {
                     caseSwitch++;
                 }
@@ -172,35 +172,41 @@ public class RedBeaconScore extends OpMode
 
             case 11:
             {
-                if(motor.followWallLeft(1, 5, 26, robot.colorRight.alpha() > 10))
+                if(motor.left(.3, robot.colorRight.alpha() > 10))
                 {
                     caseSwitch++;
                 }
                 break;
+
+
             }
 
             case 12:
             {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.INCH) < 5 ))
-                {
-                    robot.timer.reset();
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 13:
-            {
                 robot.setTurnPid();
+                robot.TOLERANCE_DEGREES  = 1;
                 motor.setPidDegrees(0);
                 caseSwitch++;
                 break;
             }
 
-            case 14:
+            case 13:
             {
                 if(motor.turn())
                 {
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    robot.TOLERANCE_DEGREES = 2;
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 14:
+            {
+                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) < 13 ))
+                {
+                    robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
@@ -208,50 +214,77 @@ public class RedBeaconScore extends OpMode
 
             case 15:
             {
-                if(robot.beaconColor.red() > robot.beaconColor.blue())
-                {
-                    robot.setDrivePid();
-                    motor.setPidDegrees(0);
-                    caseSwitch = 16;
-                }
-                else
-                {
-                    robot.timer.reset();
-                    caseSwitch = 17;
-                }
+                robot.setTurnPid();
+                motor.setPidDegrees(0);
                 robot.timer.reset();
+                caseSwitch++;
                 break;
             }
-//TODO If changing case statement number change these absolute changes
+
             case 16:
             {
-                if(motor.backward(.2, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 2 ) && robot.timer.time() > 1.5)
+                if(motor.turn())
                 {
-                    caseSwitch = 18;
+                    robot.setButtonLeftColorRead();
+                    robot.timer.reset();
+                    caseSwitch++;
                 }
                 break;
             }
 
             case 17:
             {
-                robot.setButtonPress();
-                if(robot.timer.time() > 1.5)
+                if(robot.timer.time() > 1)
                 {
-                    caseSwitch = 18;
+                    caseSwitch++;
                 }
                 break;
             }
 
             case 18:
             {
-                robot.setButtonInit();
-                robot.setDrivePid();
-                motor.setPidDegrees(0);
-                caseSwitch++;
+                if((robot.beaconColor.red() > robot.beaconColor.blue()))
+                {
+                    robot.timer.reset();
+                    caseSwitch = 19;
+                }
+                else
+                {
+                    robot.timer.reset();
+                    caseSwitch = 20;
+                }
+                robot.setAngleButtonPress();
+                break;
+            }
+//TODO If changing case statement number change these absolute changes
+            case 19:
+            {
+                robot.setButtonLeftPress();
+                caseSwitch = 21;
                 break;
             }
 
-            case 19:
+            case 20:
+            {
+                robot.setButtonRightPress();
+                caseSwitch = 21;
+                break;
+            }
+
+            case 21:
+            {
+                if(robot.timer.time() > 2)
+                {
+                    robot.setButtonLeftInit();
+                    robot.setButtonRightInit();
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 22:
             {
                 if(motor.forward(.5,robot.rangeSensor.getDistance(DistanceUnit.INCH) > 17))
                 {
@@ -261,17 +294,33 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 20:
+            case 23:
             {
                 robot.flyWheel.setPower(1);
                 robot.timer.reset();
                 caseSwitch++;
                 break;
             }
-
-            case 21:
+            case 24:
             {
-                if(robot.timer.time() > 4 )
+                robot.setTurnPid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 25:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                    break;
+                }
+            }
+
+            case 26:
+            {
+                if(robot.timer.time() > 2 )
                 {
                     robot.sweeper.setPower(1);
                     robot.timer.reset();
@@ -280,17 +329,53 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 22:
+            case 27:
             {
-                if(robot.timer.time() > 15)
+                if(robot.timer.time() > 2)
                 {
                     robot.flyWheel.setPower(0);
                     robot.sweeper.setPower(0);
+                    robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
             }
 
+            case 28:
+            {
+                robot.setTurnPid();
+                motor.setPidDegrees(-35);
+                caseSwitch++;
+                break;
+            }
+
+            case 29:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 30:
+            {
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 31:
+            {
+                if(motor.driveWithEncoder(27, 1, "f"))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
         }
     }
 
