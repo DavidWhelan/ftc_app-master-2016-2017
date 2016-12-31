@@ -204,7 +204,7 @@ public class BlueBeaconScore extends OpMode
 
             case 14:
             {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) < 11 ))
+                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) < 10 ))
                 {
                     robot.timer.reset();
                     caseSwitch++;
@@ -286,7 +286,7 @@ public class BlueBeaconScore extends OpMode
 
             case 22:
             {
-                if(motor.forward(.5,robot.rangeSensor.getDistance(DistanceUnit.INCH) > 17))
+                if(motor.forward(.5,robot.rangeSensor.getDistance(DistanceUnit.INCH) > 16))
                 {
                     robot.setAngleBackward();
                     caseSwitch++;
@@ -344,7 +344,7 @@ public class BlueBeaconScore extends OpMode
             case 28:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(35);
+                motor.setPidDegrees(37);
                 caseSwitch++;
                 break;
             }

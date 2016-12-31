@@ -172,7 +172,7 @@ public class RedBeaconScore extends OpMode
 
             case 11:
             {
-                if(motor.left(.3, robot.colorRight.alpha() > 10))
+                if(motor.left(.3, robot.colorLeft.alpha() > 10))
                 {
                     caseSwitch++;
                 }
@@ -204,7 +204,7 @@ public class RedBeaconScore extends OpMode
 
             case 14:
             {
-                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) < 13 ))
+                if(motor.followLine(robot.rangeSensor.getDistance(DistanceUnit.CM) < 10 ))
                 {
                     robot.timer.reset();
                     caseSwitch++;

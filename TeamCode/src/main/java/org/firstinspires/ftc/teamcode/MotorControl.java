@@ -7,9 +7,16 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import java.util.Timer;
+
 public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
+    private boolean setup = false;
+    private ElapsedTime internalTimer = new ElapsedTime();
+    private WallPID pid = new WallPID();
+    private Timer pidTime = new Timer();
+
     public String debug = "";
     public String debug2 = "";
     public String debug3 = "";
@@ -153,9 +160,9 @@ public class MotorControl
             {
                 double output = robot.yawPIDResult.getOutput();
                 robot.frontLeft.setPower(power + output);
-                robot.backLeft.setPower((-power + output + .2));
+                robot.backLeft.setPower((-power + output + .15));
                 robot.frontRight.setPower(-power - output);
-                robot.backRight.setPower((power - output + .2));
+                robot.backRight.setPower((power - output + .15));
             }
         }
         return false;
@@ -181,9 +188,9 @@ public class MotorControl
             {
                 double output = robot.yawPIDResult.getOutput();
                 robot.frontLeft.setPower(-power + output);
-                robot.backLeft.setPower(power + output + .2);
+                robot.backLeft.setPower(power + output + .15);
                 robot.frontRight.setPower(power - output);
-                robot.backRight.setPower(-power - output + .2);
+                robot.backRight.setPower(-power - output + .15);
             }
         }
         return false;
@@ -311,9 +318,36 @@ public class MotorControl
         robot.frontRight.setTargetPosition(pos);
         robot.backRight.setTargetPosition(pos);
     }
+    public boolean wallPID(double kp, double kd, double power, double distance)
+    {
+        if(!setup)
+        {
+            pid = new WallPID(kp, kd, power, distance, robot);
+            pidTime = new Timer();
+            pidTime.scheduleAtFixedRate(pid, 10, 10);
+            internalTimer.reset();
+            setup = true;
+        }
 
-
-
+        if(pid.onTarget())
+        {
+            if(internalTimer.time() >.5)
+            {
+                pidTime.cancel();
+                pidTime.purge();
+                setup = false;
+                return true;
+            }
+            stop();
+        }
+        else
+        {
+            internalTimer.reset();
+            double newPower = pid.getReturnPower();
+            forward(newPower, false);
+        }
+        return false;
+    }
 }
     /*
     //Note that the power left and right is relative to the side the robot is moving. Look that direction and you know left and right
