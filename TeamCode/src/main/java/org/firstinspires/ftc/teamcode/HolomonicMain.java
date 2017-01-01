@@ -74,50 +74,49 @@ public class HolomonicMain extends OpMode
     @Override
     public void loop()
     {
-        if((gamepad1.left_stick_x >0.01 || gamepad1.left_stick_x < -0.01)&&(gamepad1.left_stick_y >0.01 || gamepad1.left_stick_y < -0.01)&&(gamepad1.right_stick_x >0.01 || gamepad1.right_stick_x < -0.01))
-        {
-
             float gamepad1LeftX = gamepad1.left_stick_x;
             float gamepad1LeftY = -gamepad1.left_stick_y;
             float gamepad1RightX = -gamepad1.right_stick_x;
 
-            float FrontLeft1 = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
-            float FrontRight1 = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-            float BackRight1 = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
-            float BackLeft1 = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+            if(Math.abs(gamepad1LeftX) > 0.01 || Math.abs(gamepad1LeftY) > 0.01 || Math.abs(gamepad1RightX) > 0.01)
+            {
+                float FrontLeft1 = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
+                float FrontRight1 = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+                float BackRight1 = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
+                float BackLeft1 = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
-            FrontRight1 = Range.clip(FrontRight1, -1, 1);
-            FrontLeft1 = Range.clip(FrontLeft1, -1, 1);
-            BackRight1 = Range.clip(BackRight1, -1, 1);
-            BackLeft1 = Range.clip(BackLeft1, -1, 1);
+                FrontRight1 = Range.clip(FrontRight1, -1, 1);
+                FrontLeft1 = Range.clip(FrontLeft1, -1, 1);
+                BackRight1 = Range.clip(BackRight1, -1, 1);
+                BackLeft1 = Range.clip(BackLeft1, -1, 1);
 
-            robot.frontRight.setPower(FrontRight1);
-            robot.frontLeft.setPower(FrontLeft1);
-            robot.backRight.setPower(BackRight1);
-            robot.backLeft.setPower(BackLeft1);
-        }
+                robot.frontRight.setPower(FrontRight1);
+                robot.frontLeft.setPower(FrontLeft1);
+                robot.backRight.setPower(BackRight1);
+                robot.backLeft.setPower(BackLeft1);
+            }
         ///////////////////////////////////////////////////////////
-        else
-        {
-            float gamepad2LeftX = gamepad2.left_stick_x;
-            float gamepad2LeftY = -gamepad2.left_stick_y;
-            float gamepad2RightX = -gamepad2.right_stick_x;
+            else
+            {
+                float gamepad2LeftX = gamepad2.left_stick_x;
+                float gamepad2LeftY = -gamepad2.left_stick_y;
+                float gamepad2RightX = -gamepad2.right_stick_x;
 
-            float FrontLeft2 = gamepad2LeftY + gamepad2LeftX + gamepad2RightX;
-            float FrontRight2 = gamepad2LeftY - gamepad2LeftX - gamepad2RightX;
-            float BackRight2 = gamepad2LeftY - gamepad2LeftX + gamepad2RightX;
-            float BackLeft2 = gamepad2LeftY + gamepad2LeftX - gamepad2RightX;
+                float FrontLeft2 = gamepad2LeftY + gamepad2LeftX + gamepad2RightX;
+                float FrontRight2 = gamepad2LeftY - gamepad2LeftX - gamepad2RightX;
+                float BackRight2 = gamepad2LeftY - gamepad2LeftX + gamepad2RightX;
+                float BackLeft2 = gamepad2LeftY + gamepad2LeftX - gamepad2RightX;
 
-            FrontRight2 = Range.clip(FrontRight2, -1, 1) / 2;
-            FrontLeft2 = Range.clip(FrontLeft2, -1, 1) / 2;
-            BackRight2 = Range.clip(BackRight2, -1, 1) / 2;
-            BackLeft2 = Range.clip(BackLeft2, -1, 1) / 2;
+                FrontRight2 = Range.clip(FrontRight2, -1, 1) / 2;
+                FrontLeft2 = Range.clip(FrontLeft2, -1, 1) / 2;
+                BackRight2 = Range.clip(BackRight2, -1, 1) / 2;
+                BackLeft2 = Range.clip(BackLeft2, -1, 1) / 2;
 
-            robot.frontRight.setPower(FrontRight2);
-            robot.frontLeft.setPower(FrontLeft2);
-            robot.backRight.setPower(BackRight2);
-            robot.backLeft.setPower(BackLeft2);
-        }
+                robot.frontRight.setPower(FrontRight2);
+                robot.frontLeft.setPower(FrontLeft2);
+                robot.backRight.setPower(BackRight2);
+                robot.backLeft.setPower(BackLeft2);
+            }
         ////////////////////////////////////////////////////////////
         robot.sweeper.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
 

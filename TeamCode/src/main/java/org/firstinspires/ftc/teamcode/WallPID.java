@@ -63,7 +63,7 @@ public class WallPID extends TimerTask
 
     public boolean onTarget()
     {
-        return (Math.abs(setPoint - robot.rangeSensor.getDistance(DistanceUnit.CM))<= 2);
+        return (Math.abs(setPoint - robot.rangeSensor.getDistance(DistanceUnit.CM))<= 1);
     }
 
     public void run()

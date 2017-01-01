@@ -54,7 +54,7 @@ public class RobotHardware
 
     private final double TURN_YAW_PID_P = 0.1; //0.075
     private final double TURN_YAW_PID_I = 0.0; //0.003
-    private final double TURN_YAW_PID_D = 0.4;//0.02
+    private final double TURN_YAW_PID_D = 0.35;//0.02
 
     private final double DRIVE_YAW_PID_P = 0.065;
     private final double DRIVE_YAW_PID_I = 0.0;

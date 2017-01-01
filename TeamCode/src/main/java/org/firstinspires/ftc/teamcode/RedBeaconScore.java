@@ -234,7 +234,7 @@ public class RedBeaconScore extends OpMode
 
             case 17:
             {
-                if(robot.timer.time() > 1)
+                if(robot.timer.time() > .5)
                 {
                     caseSwitch++;
                 }

@@ -37,7 +37,7 @@ public class MotorControl
             if (robot.yawPIDResult.isOnTarget())
             {
                 stop();
-                if(robot.timer.time()>.5)
+                if(robot.timer.time()>0)
                 {
                     return true;
                 }
