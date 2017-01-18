@@ -62,7 +62,7 @@ public class SensorTest extends OpMode
     @Override
     public void start()
     {
-        //robot.gyro.resetZAxisIntegrator();
+        robot.navx_device.zeroYaw();
     }
 
     @Override

@@ -33,25 +33,27 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="Red Beacon", group="TechHogs")
-public class RedBeaconScore extends OpMode
+@Autonomous(name="Red BeaconIm", group="TechHogs")
+@Disabled
+public class RedBeaconScoreIm extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
     ElapsedTime caseTimer = new ElapsedTime();
-    int caseSwitch = 0;
+    int caseSwitch = 4;
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
-        motor.heading = 0;
+        motor.heading = -20;
     }
 
     @Override
@@ -64,8 +66,8 @@ public class RedBeaconScore extends OpMode
     public void start()
     {
         robot.run_using_encoder();
-        robot.setMaxSpeed(3000);
-        robot.navx_device.zeroYaw();
+        robot.setMaxSpeed(2400);
+        //robot.navx_device.zeroYaw();
     }
 
     @Override
@@ -73,41 +75,6 @@ public class RedBeaconScore extends OpMode
     {
         switch(caseSwitch)
         {
-            case 0:
-            {
-                robot.setDrivePid();
-                motor.setPidDegrees(0);
-                robot.stop_and_reset_encoder();
-                robot.run_using_encoder();
-                caseSwitch++;
-                break;
-            }
-
-            case 1:
-            {
-                if(motor.driveWithEncoder(6, 1, "b"))
-                {
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 2:
-            {
-                robot.setTurnPid();
-                motor.setPidDegrees(-35);
-                caseSwitch++;
-                break;
-            }
-
-            case 3:
-            {
-                if(motor.turn())
-                {
-                    caseSwitch++;
-                }
-                break;
-            }
 
             case 4:
             {
@@ -121,7 +88,7 @@ public class RedBeaconScore extends OpMode
 
             case 5:
             {
-                if(motor.driveWithEncoder(44, 1, "b"))
+                if(motor.driveWithEncoder(42, 1, "b"))
                 {
                     caseSwitch++;
                 }
@@ -131,7 +98,7 @@ public class RedBeaconScore extends OpMode
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-55);
+                motor.setPidDegrees(-70);
                 caseSwitch++;
                 break;
             }
@@ -169,7 +136,7 @@ public class RedBeaconScore extends OpMode
 
             case 11:
             {
-                if(motor.left(.4, robot.colorRight.alpha() > 10))
+                if(motor.left(.3, robot.colorLeft.alpha() > 10))
                 {
                     caseSwitch++;
                 }
@@ -205,11 +172,28 @@ public class RedBeaconScore extends OpMode
                 {
                     robot.timer.reset();
                     caseSwitch++;
-                 }
+                }
                 break;
             }
 
             case 15:
+            {
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                caseSwitch++;
+                break;
+            }
+
+            case 16:
+            {
+                if(motor.wallPID(.05, .05, 1, 10))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 17:
             {
                 robot.setTurnPid();
                 motor.setPidDegrees(0);
@@ -218,19 +202,9 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 16:
+            case 18:
             {
                 if(motor.turn())
-                {
-                    robot.setDrivePid();
-                    motor.setPidDegrees(0);
-                    caseSwitch++;
-                }
-                break;
-            }
-            case 17:
-            {
-                if(motor.wallPID(.05, .05, .5, 10))
                 {
                     robot.setButtonLeftColorRead();
                     robot.timer.reset();
@@ -239,46 +213,46 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 18:
+            case 19:
             {
-                if(robot.timer.time() > .5)
+                if(robot.timer.time() > .25)
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 19:
+            case 20:
             {
                 if((robot.beaconColor.red() > robot.beaconColor.blue()))
                 {
                     robot.timer.reset();
-                    caseSwitch = 20;
+                    caseSwitch = 21;
                 }
                 else
                 {
                     robot.timer.reset();
-                    caseSwitch = 21;
+                    caseSwitch = 22;
                 }
                 robot.setAngleButtonPress();
                 break;
             }
 //TODO If changing case statement number change these absolute changes
-            case 20:
-            {
-                robot.setButtonLeftPress();
-                caseSwitch = 22;
-                break;
-            }
-
             case 21:
             {
-                robot.setButtonRightPress();
-                caseSwitch = 22;
+                robot.setButtonLeftPress();
+                caseSwitch = 23;
                 break;
             }
 
             case 22:
+            {
+                robot.setButtonRightPress();
+                caseSwitch = 23;
+                break;
+            }
+
+            case 23:
             {
                 if(robot.timer.time() > 1)
                 {
@@ -291,9 +265,9 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 23:
+            case 24:
             {
-                if(motor.wallPID(.05, .05, .5, 43))
+                if(motor.wallPID(.05, .05, 1, 43))
                 {
                     robot.setAngleBackward();
                     caseSwitch++;
@@ -301,14 +275,14 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 24:
+            case 25:
             {
                 robot.flyWheel.setPower(1);
                 robot.timer.reset();
                 caseSwitch++;
                 break;
             }
-            case 25:
+            case 26:
             {
                 robot.setTurnPid();
                 motor.setPidDegrees(0);
@@ -316,7 +290,7 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 26:
+            case 27:
             {
                 if(motor.turn())
                 {
@@ -325,9 +299,9 @@ public class RedBeaconScore extends OpMode
                 }
             }
 
-            case 27:
+            case 28:
             {
-                if(robot.timer.time() > 1.5 )
+                if(robot.timer.time() > 1 )
                 {
                     robot.sweeper.setPower(1);
                     robot.timer.reset();
@@ -336,7 +310,7 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 28:
+            case 29:
             {
                 if(robot.timer.time() > 2)
                 {
@@ -348,15 +322,15 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 29:
+            case 30:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-32);
+                motor.setPidDegrees(-35);
                 caseSwitch++;
                 break;
             }
 
-            case 30:
+            case 31:
             {
                 if(motor.turn())
                 {
@@ -365,7 +339,7 @@ public class RedBeaconScore extends OpMode
                 break;
             }
             //This is so we can push
-            case 31:
+            case 32:
             {
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
@@ -375,9 +349,9 @@ public class RedBeaconScore extends OpMode
                 break;
             }
 
-            case 32:
+            case 33:
             {
-                if(motor.driveWithEncoder(35, 1, "f"))
+                if(motor.driveWithEncoder(27, 1, "f"))
                 {
                     caseSwitch++;
                 }

@@ -65,7 +65,7 @@ public class HolomonicMain extends OpMode
     public void start()
     {
         robot.run_using_encoder();
-        robot.setMaxSpeed(3500);
+        robot.setMaxSpeed(4000);
     }
 
     /*

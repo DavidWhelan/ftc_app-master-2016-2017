@@ -44,6 +44,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @TeleOp(name="PID", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+@Disabled
 public class PIDTest extends OpMode
 {
     /* Declare OpMode members. */
