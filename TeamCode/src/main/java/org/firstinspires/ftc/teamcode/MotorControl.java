@@ -37,7 +37,7 @@ public class MotorControl
             if (robot.yawPIDResult.isOnTarget())
             {
                 stop();
-                if(robot.timer.time()>0)
+                if(robot.timer.time()>0.2)
                 {
                     return true;
                 }
@@ -160,9 +160,9 @@ public class MotorControl
             {
                 double output = robot.yawPIDResult.getOutput();
                 robot.frontLeft.setPower(power + output);
-                robot.backLeft.setPower((-power + output + .15));
+                robot.backLeft.setPower(-power + output - .3);
                 robot.frontRight.setPower(-power - output);
-                robot.backRight.setPower((power - output + .15));
+                robot.backRight.setPower(power - output + .3);
             }
         }
         return false;
@@ -177,7 +177,7 @@ public class MotorControl
         }
         if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
         {
-            if (robot.yawPIDResult.isOnTarget())
+            /*if (robot.yawPIDResult.isOnTarget())
             {
                 robot.frontLeft.setPower(-power);
                 robot.backLeft.setPower(power);
@@ -185,13 +185,14 @@ public class MotorControl
                 robot.backRight.setPower(-power);
             }
             else
-            {
-                double output = robot.yawPIDResult.getOutput();
+            {*/
+                //double output = robot.yawPIDResult.getOutput();
+                double output=0;
                 robot.frontLeft.setPower(-power + output);
-                robot.backLeft.setPower(power + output + .15);
-                robot.frontRight.setPower(power - output);
-                robot.backRight.setPower(-power - output + .15);
-            }
+                robot.backLeft.setPower(+power - output -.5 );
+                robot.frontRight.setPower(+power - output);
+                robot.backRight.setPower(-power + output +.5);
+            //}
         }
         return false;
     }

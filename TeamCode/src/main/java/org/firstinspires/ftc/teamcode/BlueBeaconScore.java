@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -95,7 +96,7 @@ public class BlueBeaconScore extends OpMode
             case 2:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(45);
+                motor.setPidDegrees(40);
                 caseSwitch++;
                 break;
             }
@@ -121,7 +122,7 @@ public class BlueBeaconScore extends OpMode
 
             case 5:
             {
-                if(motor.driveWithEncoder(42, 1, "b"))
+                if(motor.driveWithEncoder(42 , 1, "b"))
                 {
                     caseSwitch++;
                 }
@@ -131,7 +132,7 @@ public class BlueBeaconScore extends OpMode
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(45);
+                motor.setPidDegrees(50);
                 caseSwitch++;
                 break;
             }
@@ -155,10 +156,7 @@ public class BlueBeaconScore extends OpMode
 
             case 9:
             {
-                if(motor.backward(1, robot.rangeSensor.getDistance(DistanceUnit.INCH) < 13))
-                {
-                    caseSwitch++;
-                }
+                caseSwitch++;
                 break;
             }
 
@@ -172,9 +170,12 @@ public class BlueBeaconScore extends OpMode
 
             case 11:
             {
-                if(motor.right(.3, robot.colorRight.alpha() > 10))
+                if(motor.right(1, robot.colorLeft.alpha() > 10))
                 {
-                    caseSwitch++;
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    robot.TOLERANCE_DEGREES = 2;
+                    caseSwitch+=3;
                 }
                 break;
 
@@ -208,7 +209,7 @@ public class BlueBeaconScore extends OpMode
                 {
                     robot.timer.reset();
                     caseSwitch++;
-                }
+                 }
                 break;
             }
 
@@ -225,6 +226,16 @@ public class BlueBeaconScore extends OpMode
             {
                 if(motor.turn())
                 {
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    caseSwitch++;
+                }
+                break;
+            }
+            case 17:
+            {
+                if(motor.wallPID(.05, .05, .5, 9))
+                {
                     robot.setButtonLeftColorRead();
                     robot.timer.reset();
                     caseSwitch++;
@@ -232,48 +243,48 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 17:
+            case 18:
             {
-                if(robot.timer.time() > 1)
+                if(robot.timer.time() > .5)
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 18:
+            case 19:
             {
                 if((robot.beaconColor.red() > robot.beaconColor.blue()))
                 {
                     robot.timer.reset();
-                    caseSwitch = 19;
+                    caseSwitch = 20;
                 }
                 else
                 {
                     robot.timer.reset();
-                    caseSwitch = 20;
+                    caseSwitch = 21;
                 }
                 robot.setAngleButtonPress();
                 break;
             }
 //TODO If changing case statement number change these absolute changes
-            case 19:
-            {
-                robot.setButtonRightPress();
-                caseSwitch = 21;
-                break;
-            }
-
             case 20:
             {
-                robot.setButtonLeftPress();
-                caseSwitch = 21;
+                robot.setButtonRightPress();
+                caseSwitch = 22;
                 break;
             }
 
             case 21:
             {
-                if(robot.timer.time() > 2)
+                robot.setButtonLeftPress();
+                caseSwitch = 22;
+                break;
+            }
+
+            case 22:
+            {
+                if(robot.timer.time() > 1)
                 {
                     robot.setButtonLeftInit();
                     robot.setButtonRightInit();
@@ -284,9 +295,9 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 22:
+            case 23:
             {
-                if(motor.forward(.5,robot.rangeSensor.getDistance(DistanceUnit.INCH) > 16))
+                if(motor.wallPID(.05, .05, .5, 50))
                 {
                     robot.setAngleBackward();
                     caseSwitch++;
@@ -294,14 +305,14 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 23:
+            case 24:
             {
                 robot.flyWheel.setPower(1);
                 robot.timer.reset();
                 caseSwitch++;
                 break;
             }
-            case 24:
+            case 25:
             {
                 robot.setTurnPid();
                 motor.setPidDegrees(0);
@@ -309,18 +320,18 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 25:
+            case 26:
             {
                 if(motor.turn())
                 {
                     caseSwitch++;
-                    break;
                 }
+                break;
             }
 
-            case 26:
+            case 27:
             {
-                if(robot.timer.time() > 2 )
+                if(robot.timer.time() > 1.5 )
                 {
                     robot.sweeper.setPower(1);
                     robot.timer.reset();
@@ -329,9 +340,9 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 27:
+            case 28:
             {
-                if(robot.timer.time() > 2)
+                if(robot.timer.time() > 3)
                 {
                     robot.flyWheel.setPower(0);
                     robot.sweeper.setPower(0);
@@ -341,15 +352,15 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 28:
+            case 29:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(37);
+                motor.setPidDegrees(30);
                 caseSwitch++;
                 break;
             }
 
-            case 29:
+            case 30:
             {
                 if(motor.turn())
                 {
@@ -357,8 +368,8 @@ public class BlueBeaconScore extends OpMode
                 }
                 break;
             }
-
-            case 30:
+            //This is so we can push
+            case 31:
             {
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
@@ -368,21 +379,28 @@ public class BlueBeaconScore extends OpMode
                 break;
             }
 
-            case 31:
+            case 32:
             {
-                if(motor.driveWithEncoder(27, 1, "f"))
+                if(motor.driveWithEncoder(18, 1, "f"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
         }
+        telemetry.addData("Gyro", robot.navx_device.getYaw());
+        telemetry.addData("Gyro", robot.yawPIDResult.getOutput());
     }
 
     @Override
     public void stop()
     {
+
         robot.navx_device.close();
+        robot.frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
 }

@@ -56,13 +56,13 @@ public class RobotHardware
     private final double TURN_YAW_PID_I = 0.0; //0.003
     private final double TURN_YAW_PID_D = 0.35;//0.02
 
-    private final double DRIVE_YAW_PID_P = 0.065;
+    private final double DRIVE_YAW_PID_P = 0.09;//.065
     private final double DRIVE_YAW_PID_I = 0.0;
     private final double DRIVE_YAW_PID_D = 0.0;
 
     private final double SLIDE_YAW_PID_P = 0.04;
     private final double SLIDE_YAW_PID_I = 0.0;
-    private final double SLIDE_YAW_PID_D = 0.2 ;
+    private final double SLIDE_YAW_PID_D = 0.0;
 
     public navXPIDController.PIDResult yawPIDResult;
 
@@ -127,7 +127,7 @@ public class RobotHardware
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //TODO set flyWheel max
-        flyWheel.setMaxSpeed(2500);
+        flyWheel.setMaxSpeed(3000);
 
         setButtonRightInit();
         setButtonLeftInit();
@@ -261,7 +261,7 @@ public class RobotHardware
 
     public void setButtonLeftColorRead()
     {
-        buttonPushLeft.setPosition(.48);
+        buttonPushLeft.setPosition(.59);
     }
 
 

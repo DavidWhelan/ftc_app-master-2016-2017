@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -64,7 +65,7 @@ public class RedBeaconScore extends OpMode
     public void start()
     {
         robot.run_using_encoder();
-        robot.setMaxSpeed(3000);
+        robot.setMaxSpeed(2400);
         robot.navx_device.zeroYaw();
     }
 
@@ -95,7 +96,7 @@ public class RedBeaconScore extends OpMode
             case 2:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-35);
+                motor.setPidDegrees(-30);
                 caseSwitch++;
                 break;
             }
@@ -121,7 +122,7 @@ public class RedBeaconScore extends OpMode
 
             case 5:
             {
-                if(motor.driveWithEncoder(44, 1, "b"))
+                if(motor.driveWithEncoder(36 , 1, "b"))
                 {
                     caseSwitch++;
                 }
@@ -131,7 +132,7 @@ public class RedBeaconScore extends OpMode
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-55);
+                motor.setPidDegrees(-60);
                 caseSwitch++;
                 break;
             }
@@ -171,7 +172,10 @@ public class RedBeaconScore extends OpMode
             {
                 if(motor.left(.4, robot.colorRight.alpha() > 10))
                 {
-                    caseSwitch++;
+                    robot.setDrivePid();
+                    motor.setPidDegrees(0);
+                    robot.TOLERANCE_DEGREES = 2;
+                    caseSwitch+=3;
                 }
                 break;
 
@@ -293,7 +297,7 @@ public class RedBeaconScore extends OpMode
 
             case 23:
             {
-                if(motor.wallPID(.05, .05, .5, 43))
+                if(motor.wallPID(.05, .05, .5, 55))
                 {
                     robot.setAngleBackward();
                     caseSwitch++;
@@ -321,8 +325,8 @@ public class RedBeaconScore extends OpMode
                 if(motor.turn())
                 {
                     caseSwitch++;
-                    break;
                 }
+                break;
             }
 
             case 27:
@@ -338,7 +342,7 @@ public class RedBeaconScore extends OpMode
 
             case 28:
             {
-                if(robot.timer.time() > 2)
+                if(robot.timer.time() > 3)
                 {
                     robot.flyWheel.setPower(0);
                     robot.sweeper.setPower(0);
@@ -377,19 +381,25 @@ public class RedBeaconScore extends OpMode
 
             case 32:
             {
-                if(motor.driveWithEncoder(35, 1, "f"))
+                if(motor.driveWithEncoder(22, 1, "f"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
         }
+        telemetry.addData("Gyro", robot.navx_device.getYaw());
     }
 
     @Override
     public void stop()
     {
+
         robot.navx_device.close();
+        robot.frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
 }
