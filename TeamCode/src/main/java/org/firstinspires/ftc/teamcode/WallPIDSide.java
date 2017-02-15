@@ -10,7 +10,7 @@ import java.util.TimerTask;
  * Created by David on 12/21/2016.
  */
 
-public class WallPID extends TimerTask //extends a task so it can be run in a seperate thread in order to prevent a slowdown throwing the derivitave off
+public class WallPIDSide extends TimerTask //extends a task so it can be run in a seperate thread in order to prevent a slowdown throwing the derivitave off
 {
     //Constants used in the equation
     private double kp = 0.05;
@@ -26,18 +26,18 @@ public class WallPID extends TimerTask //extends a task so it can be run in a se
     //Robot hardware
     private RobotHardware robot;
     //Default constructor
-    public WallPID()
+    public WallPIDSide()
     {
 
     }
     //Constructor
-    public WallPID(double p, double d, double power, double setPoint, RobotHardware robot)
+    public WallPIDSide(double p, double d, double power, double setPoint, RobotHardware robot)
     {
         this.setPoint = setPoint;
         this.robot = robot;
         setPower(power);
         setConstants(p, d);
-        lastError = robot.rangeSensor.getDistance(DistanceUnit.CM);
+        lastError = robot.sideRange.getDistance(DistanceUnit.CM);
     }
     //Allows access to class members and change the constants
     public void setConstants(double p, double d)
@@ -64,13 +64,13 @@ public class WallPID extends TimerTask //extends a task so it can be run in a se
     //if we are withing the acceptable error range return true
     public boolean onTarget()
     {
-        return (Math.abs(setPoint - robot.rangeSensor.getDistance(DistanceUnit.CM))<= 1);
+        return (Math.abs(setPoint - robot.sideRange.getDistance(DistanceUnit.CM))<= 1);
     }
     //Code that runs in the seperate thread to mataion correct timing
     public void run()
     {
         //calculate the difference between position and setpoint
-        double error = setPoint - robot.rangeSensor.getDistance(DistanceUnit.CM);
+        double error = setPoint - robot.sideRange.getDistance(DistanceUnit.CM);
         //calculate p
         double p = Range.clip(((kp * error)), -1, 1);
         //calculate d

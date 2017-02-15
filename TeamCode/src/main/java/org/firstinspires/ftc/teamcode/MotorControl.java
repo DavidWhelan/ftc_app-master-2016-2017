@@ -13,8 +13,10 @@ public class MotorControl
 {
     private RobotHardware robot = new RobotHardware();
     private boolean setup = false;
+    private boolean turnSetup = false;
     private ElapsedTime internalTimer = new ElapsedTime();
     private WallPID pid = new WallPID();
+    private WallPIDSide pidSide = new WallPIDSide();
     private Timer pidTime = new Timer();
 
     public String debug = "";
@@ -37,8 +39,42 @@ public class MotorControl
             if (robot.yawPIDResult.isOnTarget())
             {
                 stop();
+                if(robot.timer.time()>0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                double output = robot.yawPIDResult.getOutput();
+                robot.frontLeft.setPower(output);
+                robot.backLeft.setPower(output);
+                robot.frontRight.setPower(-output);
+                robot.backRight.setPower(-output);
+                robot.timer.reset();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean turn (double p, double i, double d)
+    {
+        if(!turnSetup)
+        {
+            robot.yawPIDController.setPID(p, i, d);
+            turnSetup = true;
+            return false;
+        }
+        if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
+        {
+            if (robot.yawPIDResult.isOnTarget())
+            {
+                stop();
                 if(robot.timer.time()>0.2)
                 {
+                    turnSetup = false;
                     return true;
                 }
                 return false;
@@ -151,18 +187,18 @@ public class MotorControl
         {
             if (robot.yawPIDResult.isOnTarget())
             {
-                robot.frontLeft.setPower(power);
-                robot.backLeft.setPower(-power);
-                robot.frontRight.setPower(-power);
-                robot.backRight.setPower(power);
+                robot.frontLeft.setPower(-power);
+                robot.backLeft.setPower(power);
+                robot.frontRight.setPower(power);
+                robot.backRight.setPower(-power);
             }
             else
             {
                 double output = robot.yawPIDResult.getOutput();
-                robot.frontLeft.setPower(power + output);
-                robot.backLeft.setPower(-power + output - .3);
-                robot.frontRight.setPower(-power - output);
-                robot.backRight.setPower(power - output + .3);
+                robot.frontLeft.setPower(-power + output);
+                robot.backLeft.setPower(power + output);// + .3);
+                robot.frontRight.setPower(power - output);
+                robot.backRight.setPower(-power - output);// - .3);
             }
         }
         return false;
@@ -177,22 +213,22 @@ public class MotorControl
         }
         if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
         {
-            /*if (robot.yawPIDResult.isOnTarget())
+            if (robot.yawPIDResult.isOnTarget())
             {
-                robot.frontLeft.setPower(-power);
-                robot.backLeft.setPower(power);
-                robot.frontRight.setPower(power);
-                robot.backRight.setPower(-power);
+                robot.frontLeft.setPower(power);
+                robot.backLeft.setPower(-power);
+                robot.frontRight.setPower(-power);
+                robot.backRight.setPower(power);
             }
             else
-            {*/
-                //double output = robot.yawPIDResult.getOutput();
-                double output=0;
-                robot.frontLeft.setPower(-power + output);
-                robot.backLeft.setPower(+power - output -.5 );
-                robot.frontRight.setPower(+power - output);
-                robot.backRight.setPower(-power + output +.5);
-            //}
+            {
+                double output = robot.yawPIDResult.getOutput();
+
+                robot.frontLeft.setPower(power + output);
+                robot.backLeft.setPower(-power + output - .3 );
+                robot.frontRight.setPower(-power - output);
+                robot.backRight.setPower(power - output +.3);
+            }
         }
         return false;
     }
@@ -321,31 +357,64 @@ public class MotorControl
     }
     public boolean wallPID(double kp, double kd, double power, double distance)
     {
-        if(!setup)
+        if(!setup)//Sets up the local variables ince
         {
-            pid = new WallPID(kp, kd, power, distance, robot);
-            pidTime = new Timer();
-            pidTime.scheduleAtFixedRate(pid, 10, 10);
-            internalTimer.reset();
-            setup = true;
+            pid = new WallPID(kp, kd, power, distance, robot); //Create a new wall PD
+            pidTime = new Timer(); // Create a new timer to run a process in a new thread
+            pidTime.scheduleAtFixedRate(pid, 10, 10); //Schedule the PD to run every 10 milliseconds in a separate thread
+            internalTimer.reset(); // Reset the timer for correct positions
+            setup = true; // make sure we only do this once
         }
 
-        if(pid.onTarget())
+        if(pid.onTarget()) // If we are where we are supposed to be
         {
-            if(internalTimer.time() >.5)
+            if(internalTimer.time() >.5) // if we are here for half a second (we are not changing position) then clean up and continue
             {
                 pidTime.cancel();
                 pidTime.purge();
                 setup = false;
                 return true;
             }
-            stop();
+            stop(); // Stop motors
         }
         else
         {
-            internalTimer.reset();
+            //if we need to adjust, grab the adjustment power and apply to the motors
+            internalTimer.reset(); // Reset because we are moving
             double newPower = pid.getReturnPower();
-            forward(newPower, false);
+            forward(newPower, false); //  apply power to the four motors
+        }
+        return false;
+    }
+
+    public boolean wallPIDSide(double kp, double kd, double power, double distance)
+    {
+        if(!setup)//Sets up the local variables ince
+        {
+            pidSide = new WallPIDSide(kp, kd, power, distance, robot); //Create a new wall PD
+            pidTime = new Timer(); // Create a new timer to run a process in a new thread
+            pidTime.scheduleAtFixedRate(pidSide, 10, 10); //Schedule the PD to run every 10 milliseconds in a separate thread
+            internalTimer.reset(); // Reset the timer for correct positions
+            setup = true; // make sure we only do this once
+        }
+
+        if(pidSide.onTarget()) // If we are where we are supposed to be
+        {
+            if(internalTimer.time() >.5) // if we are here for half a second (we are not changing position) then clean up and continue
+            {
+                pidTime.cancel();
+                pidTime.purge();
+                setup = false;
+                return true;
+            }
+            stop(); // Stop motors
+        }
+        else
+        {
+            //if we need to adjust, grab the adjustment power and apply to the motors
+            internalTimer.reset(); // Reset because we are moving
+            double newPower = pidSide.getReturnPower();
+            left(newPower, false); //  apply power to the four motors
         }
         return false;
     }

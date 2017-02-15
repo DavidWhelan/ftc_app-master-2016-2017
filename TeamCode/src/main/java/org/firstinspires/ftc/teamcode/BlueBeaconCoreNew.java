@@ -33,17 +33,14 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-
-@Autonomous(name="Red Beacon Improved", group="TechHogs")
+@Autonomous(name="Blue Beacon Improved", group="TechHogs")
 //@Disabled
-public class RedBeaconCoreNew extends OpMode
+public class BlueBeaconCoreNew extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
@@ -88,7 +85,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 1:
             {
-                if(motor.driveWithEncoder(9, 1, "b"))
+                if(motor.driveWithEncoder(12, 1, "f"))
                 {
                     caseSwitch++;
                 }
@@ -98,7 +95,7 @@ public class RedBeaconCoreNew extends OpMode
             case 2:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(20);
+                motor.setPidDegrees(-22);
                 caseSwitch++;
                 break;
             }
@@ -109,6 +106,7 @@ public class RedBeaconCoreNew extends OpMode
                 {
                     caseSwitch++;
                     robot.timer.reset();
+                    robot.setAngleBackward();
                     robot.flyWheel.setPower(1);
                 }
                 break;
@@ -131,6 +129,7 @@ public class RedBeaconCoreNew extends OpMode
                 {
                     robot.sweeper.setPower(0);
                     robot.flyWheel.setPower(0);
+                    robot.setAngleForward();
                     caseSwitch++;
                 }
                 break;
@@ -139,7 +138,7 @@ public class RedBeaconCoreNew extends OpMode
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-60);
+                motor.setPidDegrees(62);
                 caseSwitch++;
                 break;
             }
@@ -165,7 +164,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 9:
             {
-                if(motor.driveWithEncoder(34 , 1, "b"))
+                if(motor.driveWithEncoder(34 , 1, "f"))
                 {
                     caseSwitch++;
                 }
@@ -175,7 +174,7 @@ public class RedBeaconCoreNew extends OpMode
             case 10:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(40);
+                motor.setPidDegrees(-40);
                 caseSwitch++;
                 break;
             }
@@ -202,10 +201,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 13:
             {
-                if(motor.driveWithEncoder(3, .75, "b"))
-                {
-                    caseSwitch++;
-                }
+                caseSwitch++;
                 break;
             }
 
@@ -236,14 +232,21 @@ public class RedBeaconCoreNew extends OpMode
 
             case 17:
             {
-                if(motor.backward(.6, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
+                if(motor.forward(.4, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
                 {
                     caseSwitch++;
                 }
                 break;
             }
-
             case 18:
+            {
+                if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+            case 19:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -256,23 +259,23 @@ public class RedBeaconCoreNew extends OpMode
                 break;
             }
 
-            case 19:
+            case 20:
             {
-                robot.setButtonPushRight();
+                robot.setButtonPushLeft();
                 caseSwitch += 2;
                 robot.timer.reset();
                 break;
             }
 
-            case 20:
+            case 21:
             {
-                robot.setButtonPushLeft();
+                robot.setButtonPushRight();
                 caseSwitch ++ ;
                 robot.timer.reset();
                 break;
             }
 
-            case 21:
+            case 22:
             {
                 if(robot.timer.time() > 2)
                 {
@@ -283,17 +286,43 @@ public class RedBeaconCoreNew extends OpMode
                 break;
             }
 
-            case 22:
+            case 23:
             {
-                if(motor.backward(.6, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
+                robot.setDrivePid();
+                motor.setPidDegrees(0);
+                robot.run_without_encoder();
+                robot.run_using_encoder();
+                caseSwitch++;
+                break;
+            }
+
+            case 24:
+            {
+                if(motor.driveWithEncoder(30, 1, "f"))
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 25:
+            {
+                if(motor.forward(.4, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
                 {
                     robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
             }
-
-            case 23:
+            case 26:
+            {
+                if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+            case 27:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -306,23 +335,23 @@ public class RedBeaconCoreNew extends OpMode
                 break;
             }
 
-            case 24:
+            case 28:
             {
-                robot.setButtonPushRight();
+                robot.setButtonPushLeft();
                 caseSwitch += 2;
                 robot.timer.reset();
                 break;
             }
 
-            case 25:
+            case 29:
             {
-                robot.setButtonPushLeft();
+                robot.setButtonPushRight();
                 caseSwitch ++ ;
                 robot.timer.reset();
                 break;
             }
 
-            case 26:
+            case 30:
             {
                 if(robot.timer.time() > 2)
                 {

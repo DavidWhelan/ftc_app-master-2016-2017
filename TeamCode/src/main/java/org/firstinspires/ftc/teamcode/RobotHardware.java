@@ -26,6 +26,7 @@ public class RobotHardware
 
     public Servo angleAdjust = null;
     public Servo feedControl = null;
+    public Servo buttonPush = null;
     public Servo buttonPushRight = null;
     public Servo buttonPushLeft = null;
 
@@ -33,6 +34,8 @@ public class RobotHardware
     public ModernRoboticsI2cColorSensor colorRight = null;
     public ModernRoboticsI2cColorSensor beaconColor = null;
     public ModernRoboticsI2cRangeSensor rangeSensor = null;
+
+    public ModernRoboticsI2cRangeSensor sideRange = null;
 
     public ElapsedTime timer = null;
 
@@ -54,7 +57,7 @@ public class RobotHardware
 
     private final double TURN_YAW_PID_P = 0.1; //0.075
     private final double TURN_YAW_PID_I = 0.0; //0.003
-    private final double TURN_YAW_PID_D = 0.35;//0.02
+    private final double TURN_YAW_PID_D = 0.4;//0.02
 
     private final double DRIVE_YAW_PID_P = 0.09;//.065
     private final double DRIVE_YAW_PID_I = 0.0;
@@ -85,6 +88,7 @@ public class RobotHardware
         lifter = hwMap.dcMotor.get("lifter");
 
         feedControl = hwMap.servo.get("feed");
+        buttonPush = hwMap.servo.get("buttonPush");
         buttonPushRight = hwMap.servo.get("buttonPushRight");
         buttonPushLeft = hwMap.servo.get("buttonPushLeft");
         angleAdjust = hwMap.servo.get("angle");
@@ -96,6 +100,7 @@ public class RobotHardware
         beaconColor.enableLed(false);
 
         rangeSensor = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range");
+        sideRange = hwMap.get(ModernRoboticsI2cRangeSensor.class, "sideRange");
 
 
 
@@ -104,6 +109,9 @@ public class RobotHardware
 
         newAddress = I2cAddr.create8bit(0x44);
         beaconColor.setI2cAddress(newAddress);
+
+        //I2cAddr newAddress1 = I2cAddr.create8bit(0x30);
+        //sideRange.setI2cAddress(newAddress1);
 
         timer = new ElapsedTime();
 
@@ -132,6 +140,7 @@ public class RobotHardware
         setButtonRightInit();
         setButtonLeftInit();
         setAngleInit();
+        setButtonPushInit();
         //setFeedInit();
 
         //******************************************************************************************
@@ -279,11 +288,26 @@ public class RobotHardware
 
     public void setAngleBackward()
     {
-        angleAdjust.setPosition(.27);
+        angleAdjust.setPosition(.3);
     }
 
     public void setAngleButtonPress()
     {
         angleAdjust.setPosition(.1);
+    }
+
+    public void setButtonPushInit()
+    {
+        buttonPush.setPosition(0.41);
+    }
+
+    public void setButtonPushLeft()
+    {
+        buttonPush.setPosition(0.58);
+    }
+
+    public void setButtonPushRight()
+    {
+        buttonPush.setPosition(0.22);
     }
 }

@@ -15,3 +15,8 @@ Robot trajectory
     init = 240/255
     stop = 205/255
     go = 240/255
+
+ Button Press
+    Left = 142/255
+    right = 60/255
+    inital = 105/255

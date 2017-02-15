@@ -76,7 +76,7 @@ public class HolomonicMain extends OpMode
     {
             float gamepad1LeftX = gamepad1.left_stick_x;
             float gamepad1LeftY = -gamepad1.left_stick_y;
-            float gamepad1RightX = -gamepad1.right_stick_x;
+            float gamepad1RightX = gamepad1.right_stick_x;
 
             if(Math.abs(gamepad1LeftX) > 0.01 || Math.abs(gamepad1LeftY) > 0.01 || Math.abs(gamepad1RightX) > 0.01)
             {
@@ -139,8 +139,9 @@ public class HolomonicMain extends OpMode
         if(gamepad2.a) robot.flyWheel.setPower(0);
         if(gamepad2.y) robot.flyWheel.setPower(1);
 
-        if(gamepad2.x) robot.setButtonRightInit();
-        if(gamepad2.b) robot.setButtonRightPress();
+        if(gamepad2.dpad_right)robot.setButtonPushRight();
+        if(gamepad2.dpad_left)robot.setButtonPushLeft();
+        if(!gamepad2.dpad_right && !gamepad2.dpad_left)robot.setButtonPushInit();
 
         if(gamepad2.dpad_up) robot.setAngleBackward();
         if(gamepad2.dpad_down) robot.setAngleForward();

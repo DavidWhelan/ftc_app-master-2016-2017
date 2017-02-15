@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -57,6 +58,7 @@ public class SensorTest extends OpMode
     @Override
     public void init_loop()
     {
+
     }
 
     @Override
@@ -78,6 +80,12 @@ public class SensorTest extends OpMode
         telemetry.addData("cRight Green", "Color Right Green: " + robot.colorRight.green());
         telemetry.addData("cRight Alpha", "Color Right Alpha: " + robot.colorRight.alpha());
         telemetry.addData("range", "Range: " + robot.rangeSensor.getDistance(DistanceUnit.CM));
+
+        telemetry.addData("rangeSide", "Range Side: " + robot.sideRange.getDistance(DistanceUnit.CM));
+        boolean test = true;
+        I2cAddr testAddr = I2cAddr.create8bit(0x30);
+        test = testAddr == robot.sideRange.getI2cAddress();
+        telemetry.addData("rangeSide", "Range address: " + test);
 
         telemetry.addData("Beacon Red", robot.beaconColor.red());
         telemetry.addData("Beacon Blue", robot.beaconColor.blue());
