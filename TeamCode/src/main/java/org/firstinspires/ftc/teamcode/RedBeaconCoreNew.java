@@ -202,7 +202,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 13:
             {
-                if(motor.driveWithEncoder(3, .75, "b"))
+                if(motor.driveWithEncoder(5, .75, "b"))
                 {
                     caseSwitch++;
                 }
@@ -236,7 +236,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 17:
             {
-                if(motor.backward(.6, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
+                if(motor.backward(.5, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
                 {
                     caseSwitch++;
                 }
@@ -285,7 +285,7 @@ public class RedBeaconCoreNew extends OpMode
 
             case 22:
             {
-                if(motor.backward(.6, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
+                if(motor.backward(.5, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
                 {
                     robot.timer.reset();
                     caseSwitch++;

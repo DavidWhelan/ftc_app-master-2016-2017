@@ -100,7 +100,7 @@ public class HolomonicMain extends OpMode
             {
                 float gamepad2LeftX = gamepad2.left_stick_x;
                 float gamepad2LeftY = -gamepad2.left_stick_y;
-                float gamepad2RightX = -gamepad2.right_stick_x;
+                float gamepad2RightX = gamepad2.right_stick_y;
 
                 float FrontLeft2 = gamepad2LeftY + gamepad2LeftX + gamepad2RightX;
                 float FrontRight2 = gamepad2LeftY - gamepad2LeftX - gamepad2RightX;
@@ -120,18 +120,37 @@ public class HolomonicMain extends OpMode
         ////////////////////////////////////////////////////////////
         robot.sweeper.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
 
-        if(gamepad1.right_bumper)
+        if(gamepad1.right_bumper || gamepad1.left_bumper)
         {
-            robot.lifter.setPower(1);
-        }
-        else if(gamepad1.left_bumper)
-        {
-            robot.lifter.setPower(-1);
+            if(gamepad1.right_bumper)
+            {
+                robot.lifter.setPower(1);
+            }
+            else if(gamepad1.left_bumper)
+            {
+                robot.lifter.setPower(-1);
+            }
+            else
+            {
+                robot.lifter.setPower(0);
+            }
         }
         else
         {
-            robot.lifter.setPower(0);
+            if(gamepad2.right_bumper)
+            {
+                robot.lifter.setPower(1);
+            }
+            else if(gamepad2.left_bumper)
+            {
+                robot.lifter.setPower(-1);
+            }
+            else
+            {
+                robot.lifter.setPower(0);
+            }
         }
+
 
         //******************************************************************************************
 

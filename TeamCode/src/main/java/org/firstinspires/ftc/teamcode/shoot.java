@@ -45,6 +45,7 @@ public class Shoot extends OpMode
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
     ElapsedTime caseTimer = new ElapsedTime();
+
     int caseSwitch = 0;
     @Override
     public void init()
@@ -83,7 +84,7 @@ public class Shoot extends OpMode
 
             case 1:
             {
-                if(motor.driveWithEncoder(32, .5, "f"))
+                if(motor.driveWithEncoder(29, .5, "f"))
                 {
                     caseSwitch++;
                 }
@@ -133,7 +134,7 @@ public class Shoot extends OpMode
 
             case 6:
             {
-                if(motor.driveWithEncoder(15, 1, "f"))
+                if(motor.driveWithEncoder(25, 1, "f"))
                 {
                     caseSwitch++;
                 }

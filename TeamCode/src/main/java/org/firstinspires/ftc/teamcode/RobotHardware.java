@@ -135,7 +135,7 @@ public class RobotHardware
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //TODO set flyWheel max
-        flyWheel.setMaxSpeed(3000);
+        flyWheel.setMaxSpeed(2700);
 
         setButtonRightInit();
         setButtonLeftInit();
