@@ -93,7 +93,7 @@ public class MotorControl
         return false;
     }
 
-    public boolean freezeTurn ()
+    /*public boolean freezeTurn ()
     {
         if (robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult))
         {
@@ -118,7 +118,7 @@ public class MotorControl
             }
         }
         return false;
-    }
+    }*/
 
     public boolean forward(double power, boolean stop)
     {

@@ -61,7 +61,7 @@ public class RobotHardware
 
     private final double DRIVE_YAW_PID_P = 0.09;//.065
     private final double DRIVE_YAW_PID_I = 0.0;
-    private final double DRIVE_YAW_PID_D = 0.0;
+    private final double DRIVE_YAW_PID_D = 0.03;
 
     private final double SLIDE_YAW_PID_P = 0.04;
     private final double SLIDE_YAW_PID_I = 0.0;
@@ -135,7 +135,7 @@ public class RobotHardware
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //TODO set flyWheel max
-        flyWheel.setMaxSpeed(2700);
+        flyWheel.setMaxSpeed(2550);
 
         setButtonRightInit();
         setButtonLeftInit();

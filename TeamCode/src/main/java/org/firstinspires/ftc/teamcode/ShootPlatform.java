@@ -39,8 +39,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="Shoot", group="TechHogs")
-public class Shoot extends OpMode
+@Autonomous(name="Shoot Platform", group="TechHogs")
+public class ShootPlatform extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
@@ -67,6 +67,7 @@ public class Shoot extends OpMode
         robot.run_using_encoder();
         robot.setMaxSpeed(2400);
         robot.navx_device.zeroYaw();
+        robot.timer.reset();
     }
 
     @Override
@@ -76,22 +77,30 @@ public class Shoot extends OpMode
         {
             case 0:
             {
+                if(robot.timer.time() > 0)
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+            case 1:
+            {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
                 caseSwitch++;
                 break;
             }
 
-            case 1:
+            case 2:
             {
-                if(motor.driveWithEncoder(29, .5, "f"))
+                if(motor.driveWithEncoder(23, .5, "f"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 2:
+            case 3:
             {
                 robot.setAngleBackward();
                 robot.flyWheel.setPower(1);
@@ -100,9 +109,9 @@ public class Shoot extends OpMode
                 break;
             }
 
-            case 3:
+            case 4:
             {
-                if(robot.timer.time() > 5)
+                if(robot.timer.time() > 2.3)
                 {
                     robot.sweeper.setPower(1);
                     robot.timer.reset();
@@ -111,9 +120,9 @@ public class Shoot extends OpMode
                 break;
             }
 
-            case 4:
+            case 5:
             {
-                if(robot.timer.time() > 10)
+                if(robot.timer.time() > 6)
                 {
                     robot.flyWheel.setPower(0);
                     robot.sweeper.setPower(0);
@@ -122,7 +131,7 @@ public class Shoot extends OpMode
                 break;
             }
 
-            case 5:
+            case 6:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
@@ -132,7 +141,7 @@ public class Shoot extends OpMode
                 break;
             }
 
-            case 6:
+            case 7:
             {
                 if(motor.driveWithEncoder(25, 1, "f"))
                 {

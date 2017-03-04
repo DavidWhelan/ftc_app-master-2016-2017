@@ -53,6 +53,8 @@ public class HolomonicMain extends OpMode
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
+        robot.flyWheel.setMaxSpeed(2550);
+        //robot.run_without_encoder();
     }
 
     @Override
