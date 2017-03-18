@@ -38,9 +38,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Blue Beacon Improved 2", group="TechHogs")
+@Autonomous(name="Blue Beacon Improved 3", group="TechHogs")
 //@Disabled
-public class BlueBeaconCoreNew2 extends OpMode
+public class BlueBeaconCoreNew3 extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);

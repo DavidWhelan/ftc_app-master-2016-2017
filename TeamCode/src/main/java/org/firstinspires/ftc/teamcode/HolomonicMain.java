@@ -47,13 +47,15 @@ public class HolomonicMain extends OpMode
 
     RobotHardware robot = new RobotHardware();
     boolean release = false;
+    int max;
 
     @Override
     public void init()
     {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
-        robot.flyWheel.setMaxSpeed(2550);
+        robot.flyWheel.setMaxSpeed(3000);
+        max = 3000;
         //robot.run_without_encoder();
     }
 
@@ -172,6 +174,34 @@ public class HolomonicMain extends OpMode
         //apply for trajectory change
 
         //apply for button pusher servo
+
+        if(gamepad2.x)
+        {
+            robot.blockDown();
+        }
+
+        if(gamepad2.b)
+        {
+            robot.blockUp();
+        }
+
+        if(gamepad1.a && release == false)
+        {
+            release = true;
+            max -= 100 ;
+        }
+        else if(gamepad1.y && release == false)
+        {
+            release = true;
+            max += 100;
+        }
+        if(!gamepad1.a && !gamepad1.y)
+        {
+            release = false;
+        }
+        robot.flyWheel.setMaxSpeed(max);
+
+        telemetry.addData("Speed", max);
     }
 
     /*

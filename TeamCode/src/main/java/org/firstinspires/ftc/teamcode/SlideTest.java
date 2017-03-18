@@ -35,17 +35,17 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Slide Test", group="TechHogs")
-//
-@Disabled
+//@Disabled
 public class SlideTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
-    int caseSwitch = 1;
+    int caseSwitch = 0;
     @Override
     public void init()
     {
@@ -68,21 +68,19 @@ public class SlideTest extends OpMode
         robot.navx_device.zeroYaw();
         robot.timer.reset();
         robot.setSlidePid();
+        robot.frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     @Override
     public void loop()
     {
-        switch(caseSwitch)
-        {
-            case 1:
-            {
-                if(motor.right(1, robot.timer.time() > 1 && robot.colorLeft.alpha() > 10)) caseSwitch++;
-                break;
-            }
-        }
+
         telemetry.addData("Gyro", robot.navx_device.getYaw());
         telemetry.addData("Output", robot.yawPIDResult.getOutput());
+        telemetry.addData("frontRight", robot.frontRight.getCurrentPosition());
     }
 
     @Override

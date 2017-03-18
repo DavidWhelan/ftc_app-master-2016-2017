@@ -29,6 +29,7 @@ public class RobotHardware
     public Servo buttonPush = null;
     public Servo buttonPushRight = null;
     public Servo buttonPushLeft = null;
+    public Servo blocker = null;
 
     public ModernRoboticsI2cColorSensor colorLeft = null;
     public ModernRoboticsI2cColorSensor colorRight = null;
@@ -92,6 +93,7 @@ public class RobotHardware
         buttonPushRight = hwMap.servo.get("buttonPushRight");
         buttonPushLeft = hwMap.servo.get("buttonPushLeft");
         angleAdjust = hwMap.servo.get("angle");
+        blocker = hwMap.servo.get("block");
 
         colorLeft = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cLeft");
         colorRight = (ModernRoboticsI2cColorSensor)hwMap.colorSensor.get("cRight");
@@ -141,6 +143,7 @@ public class RobotHardware
         setButtonLeftInit();
         setAngleInit();
         setButtonPushInit();
+        blockDown();
         //setFeedInit();
 
         //******************************************************************************************
@@ -278,18 +281,18 @@ public class RobotHardware
 
     public void setAngleInit()
     {
-        angleAdjust.setPosition(0);
+        angleAdjust.setPosition(0.0);
     }
 
     public void setAngleForward()
     {
-        angleAdjust.setPosition(0);
+        angleAdjust.setPosition(0.05);
     }
 
     public void setAngleBackward()
     {
-        angleAdjust.setPosition(.3);
-    }
+        angleAdjust.setPosition(.23);
+    }//.26
 
     public void setAngleButtonPress()
     {
@@ -309,5 +312,15 @@ public class RobotHardware
     public void setButtonPushRight()
     {
         buttonPush.setPosition(0.22);
+    }
+
+    public void blockDown()
+    {
+        blocker.setPosition(1);
+    }
+
+    public void blockUp()
+    {
+        blocker.setPosition(.9058);
     }
 }

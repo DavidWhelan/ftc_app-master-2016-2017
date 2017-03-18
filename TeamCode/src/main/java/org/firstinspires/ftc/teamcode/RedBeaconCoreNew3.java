@@ -38,13 +38,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Blue Beacon Improved 2", group="TechHogs")
+@Autonomous(name="Red Beacon Improved 3", group="TechHogs")
 //@Disabled
-public class BlueBeaconCoreNew2 extends OpMode
+public class RedBeaconCoreNew3 extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
     ElapsedTime caseTimer = new ElapsedTime();
+
     int caseSwitch = 0;
     @Override
     public void init()
@@ -65,7 +66,7 @@ public class BlueBeaconCoreNew2 extends OpMode
     {
         robot.run_using_encoder();
         robot.setMaxSpeed(2400);
-        robot.flyWheel.setMaxSpeed(2650);
+        robot.flyWheel.setMaxSpeed(2175);
         robot.navx_device.zeroYaw();
     }
 
@@ -74,7 +75,6 @@ public class BlueBeaconCoreNew2 extends OpMode
     {
         switch(caseSwitch)
         {
-            //Drive away from wall in order to be correct distance
             case 0:
             {
                 robot.setDrivePid();
@@ -87,13 +87,13 @@ public class BlueBeaconCoreNew2 extends OpMode
 
             case 1:
             {
-                if(motor.driveWithEncoder(10, 1, "f"))
+                if(motor.driveWithEncoder(10, 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-            //Line up robot with goal
+
             case 2:
             {
                 robot.setTurnPid();
@@ -108,12 +108,12 @@ public class BlueBeaconCoreNew2 extends OpMode
                 {
                     caseSwitch++;
                     robot.timer.reset();
-                    robot.setAngleBackward();
+                    robot.setAngleForward();
                     robot.flyWheel.setPower(1);
                 }
                 break;
             }
-            //Wait for fly wheel to speed up
+
             case 4:
             {
                 if(robot.timer.time() > 1.3)
@@ -136,17 +136,17 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            //Turn to drive to the wall
+
             case 6:
             {
                 //robot.setTurnPid();
-                robot.yawPIDController.setPID(.05, 0, .13);
-                motor.setPidDegrees(50);
-                caseSwitch++;
+                robot.yawPIDController.setPID(.04, 0, .11);
+                motor.setPidDegrees(-55);
+                caseSwitch+=2;
                 break;
             }
 
-            case 7:
+            case 8:
             {
                 if(motor.turn())
                 {
@@ -154,8 +154,8 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            //Drive to wall
-            case 8:
+
+            case 9:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
@@ -165,25 +165,25 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 9:
+            case 10:
             {
-                if(motor.driveWithEncoder(34 , 1, "f"))
+                if(motor.driveWithEncoder(30 , 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-            //Turn parallell to wall
-            case 10:
+
+            case 11:
             {
                 //robot.setTurnPid();
-                robot.yawPIDController.setPID(.04, 0, .14);
-                motor.setPidDegrees(-50);
+                robot.yawPIDController.setPID(.045, 0, .11);
+                motor.setPidDegrees(55);
                 caseSwitch++;
                 break;
             }
 
-            case 11:
+            case 12:
             {
                 if(motor.turn())
                 {
@@ -193,7 +193,7 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 12:
+            case 13:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
@@ -203,16 +203,16 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 13:
+            case 14:
             {
-                if(motor.driveWithEncoder(5, 1, "f"))
+                if(motor.driveWithEncoder(9, 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-            //Slide until touching the wall
-            case 14:
+
+            case 15:
             {
                 robot.setSlidePid();
                 motor.setPidDegrees(0);
@@ -220,7 +220,7 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 15:
+            case 16:
             {
                 if(motor.wallPIDSide(.05, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
                 {
@@ -230,24 +230,24 @@ public class BlueBeaconCoreNew2 extends OpMode
             }
 
 
-            case 16:
+            case 17:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
                 caseSwitch++;
                 break;
             }
-            //Drive untill we see line
-            case 17:
+
+            case 18:
             {
-                if(motor.forward(.3, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
+                if(motor.backward(.3, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
                 {
                     caseSwitch++;
                 }
                 break;
             }
-            //Make sure we are aginst the wall
-            case 18:
+
+            case 19:
             {
                 if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
                 {
@@ -258,7 +258,7 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            case 19:
+            case 20:
             {
                 if(motor.right(1, robot.timer.time() > .35 ))
                 {
@@ -266,8 +266,7 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            //Check beacons and push the right ones
-            case 20:
+            case 21:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -280,23 +279,23 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 21:
+            case 22:
             {
-                robot.setButtonPushLeft();
+                robot.setButtonPushRight();
                 caseSwitch += 2;
                 robot.timer.reset();
                 break;
             }
 
-            case 22:
+            case 23:
             {
-                robot.setButtonPushRight();
+                robot.setButtonPushLeft();
                 caseSwitch ++ ;
                 robot.timer.reset();
                 break;
             }
 
-            case 23:
+            case 24:
             {
                 if(robot.timer.time() > 1)
                 {
@@ -306,8 +305,8 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            //Drive to other beacon
-            case 24:
+
+            case 25:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
@@ -317,31 +316,19 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 25:
+            case 26:
             {
-                if(motor.driveWithEncoder(30, 1, "f"))
+                if(motor.driveWithEncoder(33, 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 26:
-            {
-                if(motor.forward(.3, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
-                {
-                    robot.timer.reset();
-                    caseSwitch++;
-                }
-                break;
-            }
-            //Make sure we are against the wall
             case 27:
             {
-                if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
+                if(motor.backward(.3, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
                 {
-                    robot.setSlidePid();
-                    motor.setPidDegrees(0);
                     robot.timer.reset();
                     caseSwitch++;
                 }
@@ -349,14 +336,24 @@ public class BlueBeaconCoreNew2 extends OpMode
             }
             case 28:
             {
+                if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
+                {
+                    robot.setSlidePid();
+                    motor.setPidDegrees(0);
+                    robot.timer.reset();
+                    caseSwitch++;
+                }
+                break;
+            }
+            case 29:
+            {
                 if(motor.right(1, robot.timer.time() > .35 ))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-            //Check the beacon and press
-            case 29:
+            case 30:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -369,23 +366,23 @@ public class BlueBeaconCoreNew2 extends OpMode
                 break;
             }
 
-            case 30:
+            case 31:
             {
-                robot.setButtonPushLeft();
+                robot.setButtonPushRight();
                 caseSwitch += 2;
                 robot.timer.reset();
                 break;
             }
 
-            case 31:
+            case 32:
             {
-                robot.setButtonPushRight();
+                robot.setButtonPushLeft();
                 caseSwitch ++ ;
                 robot.timer.reset();
                 break;
             }
 
-            case 32:
+            case 33:
             {
                 if(robot.timer.time() > 1)
                 {
@@ -397,8 +394,8 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            //Move away from wall
-            case 33:
+
+            case 34:
             {
                 if(motor.left(1, robot.timer.time() > .5))
                 {
@@ -406,19 +403,20 @@ public class BlueBeaconCoreNew2 extends OpMode
                 }
                 break;
             }
-            case 34:
+
+            case 35:
             {
                 robot.setDrivePid();
-                motor.setPidDegrees(55);
+                motor.setPidDegrees(-60);
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
                 caseSwitch++;
                 break;
             }
-            //Knock the ball off
-            case 35:
+
+            case 36:
             {
-                if(motor.driveWithEncoder(70, 1, "b"))
+                if(motor.driveWithEncoder(67, 1, "f"))
                 {
                     caseSwitch++;
                 }
@@ -433,6 +431,8 @@ public class BlueBeaconCoreNew2 extends OpMode
         telemetry.addData("FrontRight",  robot.frontRight.getPower());
         telemetry.addData("Gyro", robot.navx_device.getYaw());
         telemetry.addData("Yaw Set", robot.yawPIDController.getSetpoint());
+        telemetry.addData("Yaw Out", robot.yawPIDResult.getOutput());
+
     }
 
     @Override

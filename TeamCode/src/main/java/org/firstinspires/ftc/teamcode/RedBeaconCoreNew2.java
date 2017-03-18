@@ -205,7 +205,7 @@ public class RedBeaconCoreNew2 extends OpMode
 
             case 14:
             {
-                if(motor.driveWithEncoder(8, 1, "b"))
+                if(motor.driveWithEncoder(9, 1, "b"))
                 {
                     caseSwitch++;
                 }
