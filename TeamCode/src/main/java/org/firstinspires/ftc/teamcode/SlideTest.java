@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Slide Test", group="TechHogs")
-//@Disabled
+@Disabled
 public class SlideTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();

@@ -32,10 +32,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @Autonomous(name="Red Beacon Improved 3", group="TechHogs")
@@ -81,57 +84,53 @@ public class RedBeaconCoreNew3 extends OpMode
                 motor.setPidDegrees(0);
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
+                robot.blockUp();
                 caseSwitch++;
+
                 break;
             }
 
             case 1:
             {
-                if(motor.driveWithEncoder(10, 1, "b"))
+                if(motor.driveWithEncoder(5, 1, "b"))
                 {
-                    caseSwitch++;
+                    caseSwitch+=3;
                 }
                 break;
             }
 
             case 2:
             {
-                robot.setTurnPid();
-                motor.setPidDegrees(0);
+                //robot.setTurnPid();
+                robot.yawPIDController.setPID(.04, 0, .105);
+                motor.setPidDegrees(-45);
                 caseSwitch++;
                 break;
             }
 
             case 3:
             {
-                if(motor.turn(.05, 0, .13))
+                if(motor.turn())
                 {
                     caseSwitch++;
-                    robot.timer.reset();
-                    robot.setAngleForward();
-                    robot.flyWheel.setPower(1);
                 }
                 break;
             }
 
             case 4:
             {
-                if(robot.timer.time() > 1.3)
-                {
-                    robot.sweeper.setPower(1);
-                    caseSwitch++;
-                    robot.timer.reset();
-                }
+                robot.setDrivePid();
+                motor.setPidDegrees(-45);
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
+                caseSwitch++;
                 break;
             }
 
             case 5:
             {
-                if(robot.timer.time() > 2.3)
+                if(motor.driveWithEncoder(35, 1, "b"))
                 {
-                    robot.sweeper.setPower(0);
-                    robot.flyWheel.setPower(0);
-                    robot.setAngleForward();
                     caseSwitch++;
                 }
                 break;
@@ -140,50 +139,13 @@ public class RedBeaconCoreNew3 extends OpMode
             case 6:
             {
                 //robot.setTurnPid();
-                robot.yawPIDController.setPID(.04, 0, .11);
-                motor.setPidDegrees(-55);
-                caseSwitch+=2;
-                break;
-            }
-
-            case 8:
-            {
-                if(motor.turn())
-                {
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 9:
-            {
-                robot.setDrivePid();
-                motor.setPidDegrees(0);
-                robot.stop_and_reset_encoder();
-                robot.run_using_encoder();
-                caseSwitch++;
-                break;
-            }
-
-            case 10:
-            {
-                if(motor.driveWithEncoder(30 , 1, "b"))
-                {
-                    caseSwitch++;
-                }
-                break;
-            }
-
-            case 11:
-            {
-                //robot.setTurnPid();
                 robot.yawPIDController.setPID(.045, 0, .11);
-                motor.setPidDegrees(55);
+                motor.setPidDegrees(45);
                 caseSwitch++;
                 break;
             }
 
-            case 12:
+            case 7:
             {
                 if(motor.turn())
                 {
@@ -193,26 +155,26 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 13:
+            case 8:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
-                caseSwitch++;
+                caseSwitch+=2;
                 break;
             }
 
-            case 14:
+            case 9:
             {
-                if(motor.driveWithEncoder(9, 1, "b"))
+                if(motor.driveWithEncoder(0, 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 15:
+            case 10:
             {
                 robot.setSlidePid();
                 motor.setPidDegrees(0);
@@ -220,7 +182,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 16:
+            case 11:
             {
                 if(motor.wallPIDSide(.05, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
                 {
@@ -230,24 +192,30 @@ public class RedBeaconCoreNew3 extends OpMode
             }
 
 
-            case 17:
+            case 12:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
+                robot.sweeper.setPower(1);
+                robot.timer.reset();
                 caseSwitch++;
                 break;
             }
 
-            case 18:
+            case 13:
             {
-                if(motor.backward(.3, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
+                if(robot.timer.time() > .25)
+                {
+                    robot.sweeper.setPower(0);
+                }
+                if(motor.backward(.25, robot.colorLeft.alpha() > 10)) //TODO rename and replace sensors
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 19:
+            case 14:
             {
                 if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
                 {
@@ -258,7 +226,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 }
                 break;
             }
-            case 20:
+            case 15:
             {
                 if(motor.right(1, robot.timer.time() > .35 ))
                 {
@@ -266,7 +234,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 }
                 break;
             }
-            case 21:
+            case 16:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -279,7 +247,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 22:
+            case 17:
             {
                 robot.setButtonPushRight();
                 caseSwitch += 2;
@@ -287,7 +255,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 23:
+            case 18:
             {
                 robot.setButtonPushLeft();
                 caseSwitch ++ ;
@@ -295,9 +263,9 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 24:
+            case 19:
             {
-                if(robot.timer.time() > 1)
+                if(robot.timer.time() > .5)//TODO
                 {
                     robot.setButtonPushInit();
                     robot.timer.reset();
@@ -306,7 +274,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 25:
+            case 20:
             {
                 robot.setDrivePid();
                 motor.setPidDegrees(0);
@@ -316,25 +284,25 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 26:
+            case 21:
             {
-                if(motor.driveWithEncoder(33, 1, "b"))
+                if(motor.driveWithEncoder(38, 1, "b"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
 
-            case 27:
+            case 22:
             {
-                if(motor.backward(.3, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
+                if(motor.backward(.25, robot.colorLeft.alpha() > 10 && robot.timer.time() > 1)) //TODO rename and replace sensors
                 {
                     robot.timer.reset();
                     caseSwitch++;
                 }
                 break;
             }
-            case 28:
+            case 23:
             {
                 if(motor.wallPIDSide(.15, .05, 1, 4))//TODO Set Distance and make sure we are straight with gyro
                 {
@@ -345,7 +313,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 }
                 break;
             }
-            case 29:
+            case 24:
             {
                 if(motor.right(1, robot.timer.time() > .35 ))
                 {
@@ -353,7 +321,7 @@ public class RedBeaconCoreNew3 extends OpMode
                 }
                 break;
             }
-            case 30:
+            case 25:
             {
                 if(robot.beaconColor.red() > robot.beaconColor.blue())
                 {
@@ -363,10 +331,11 @@ public class RedBeaconCoreNew3 extends OpMode
                 {
                     caseSwitch+=2;
                 }
+                robot.angleAdjust.setPosition(.26);
                 break;
             }
 
-            case 31:
+            case 26:
             {
                 robot.setButtonPushRight();
                 caseSwitch += 2;
@@ -374,17 +343,17 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
-            case 32:
+            case 27:
             {
                 robot.setButtonPushLeft();
-                caseSwitch ++ ;
+                caseSwitch++ ;
                 robot.timer.reset();
                 break;
             }
 
-            case 33:
+            case 28:
             {
-                if(robot.timer.time() > 1)
+                if(robot.timer.time() > .5)//TODO
                 {
                     robot.timer.reset();
                     robot.setSlidePid();
@@ -395,10 +364,61 @@ public class RedBeaconCoreNew3 extends OpMode
                 break;
             }
 
+            case 29:
+            {
+                if(motor.left(1, robot.sideRange.getDistance(DistanceUnit.INCH) > 12))
+                {
+                    robot.flyWheel.setPower(1);
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 30:
+            {
+                robot.yawPIDController.setPID(.04, 0, .11);
+                robot.yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, 1);
+                motor.setPidDegrees(-42);
+                caseSwitch++;
+                break;
+            }
+
+            case 31:
+            {
+                if(motor.turn())
+                {
+                    caseSwitch++;
+                }
+                break;
+            }
+
+            case 32:
+            {
+                robot.setDrivePid();;
+                motor.setPidDegrees(0);
+                robot.stop_and_reset_encoder();
+                robot.run_using_encoder();
+                caseSwitch++;
+                break;
+            }
+
+            case 33:
+            {
+                if(motor.driveWithEncoder(33, 1, "f"))
+                {
+                    robot.sweeper.setPower(1);
+                    robot.timer.reset();
+                    caseSwitch++;
+                }
+                break;
+            }
+
             case 34:
             {
-                if(motor.left(1, robot.timer.time() > .5))
+                if(robot.timer.time() > 3)
                 {
+                    robot.sweeper.setPower(0);
+                    robot.flyWheel.setPower(0);
                     caseSwitch++;
                 }
                 break;
@@ -407,7 +427,7 @@ public class RedBeaconCoreNew3 extends OpMode
             case 35:
             {
                 robot.setDrivePid();
-                motor.setPidDegrees(-60);
+                motor.setPidDegrees(0);
                 robot.stop_and_reset_encoder();
                 robot.run_using_encoder();
                 caseSwitch++;
@@ -416,7 +436,7 @@ public class RedBeaconCoreNew3 extends OpMode
 
             case 36:
             {
-                if(motor.driveWithEncoder(67, 1, "f"))
+                if(motor.driveWithEncoder(15, 1, "f"))
                 {
                     caseSwitch++;
                 }

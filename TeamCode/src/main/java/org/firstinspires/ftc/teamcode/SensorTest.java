@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -43,11 +44,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name="Sensor Test", group="TechHogs")
+@TeleOp(name="Sensor Test", group="TechHogs")
 public class SensorTest extends OpMode
 {
     RobotHardware robot = new RobotHardware();
     MotorControl motor = new MotorControl(robot);
+    boolean stop = false;
+    boolean release = false;
+    int max = 2900;
     @Override
     public void init()
     {
@@ -94,6 +98,49 @@ public class SensorTest extends OpMode
 
         telemetry.addData("Gyro", robot.navx_device.getYaw());
 
+        telemetry.addData("FR", robot.frontRight.getCurrentPosition());
+        telemetry.addData("BR", robot.backRight.getCurrentPosition());
+        telemetry.addData("FL", robot.frontLeft.getCurrentPosition());
+        telemetry.addData("BL", robot.backLeft.getCurrentPosition());
+
+        telemetry.addData("FW", robot.flyWheel.getCurrentPosition());
+
+        if(gamepad1.a)
+        {
+            robot.flyWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            stop = true;
+        }
+        else if(gamepad1.y)
+        {
+            robot.flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            stop = false;
+        }
+
+        if(stop)
+        {
+            robot.timer.reset();
+        }
+        else if(!stop)
+        {
+            telemetry.addData("Speed", robot.flyWheel.getCurrentPosition()/robot.timer.time());
+        }
+        if(gamepad1.a && release == false)
+        {
+            release = true;
+            max -= 100 ;
+        }
+        else if(gamepad1.y && release == false)
+        {
+            release = true;
+            max += 100;
+        }
+        if(!gamepad1.a && !gamepad1.y)
+        {
+            release = false;
+        }
+        robot.flyWheel.setMaxSpeed(max);
+
+        telemetry.addData("Speed", max);
     }
 
     @Override

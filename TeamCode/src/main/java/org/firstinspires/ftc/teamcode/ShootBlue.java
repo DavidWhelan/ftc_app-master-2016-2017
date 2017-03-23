@@ -92,7 +92,7 @@ public class ShootBlue extends OpMode
 
             case 2:
             {
-                if(motor.driveWithEncoder(23, .5, "f"))
+                if(motor.driveWithEncoder(41, .5, "f"))
                 {
                     caseSwitch++;
                 }
@@ -133,7 +133,7 @@ public class ShootBlue extends OpMode
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(65);
+                motor.setPidDegrees(-115);
                 robot.run_using_encoder();
                 caseSwitch++;
                 break;
@@ -141,7 +141,7 @@ public class ShootBlue extends OpMode
 
             case 7:
             {
-                if(motor.turn(.04, 0, .11))
+                if(motor.turn())
                 {
                     caseSwitch++;
                 }
@@ -160,7 +160,7 @@ public class ShootBlue extends OpMode
 
             case 9:
             {
-                if(motor.driveWithEncoder(64, 1, "f"))
+                if(motor.driveWithEncoder(64, 1, "b"))
                 {
                     caseSwitch++;
                 }

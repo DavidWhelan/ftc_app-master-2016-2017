@@ -74,6 +74,7 @@ public class ShootRed extends OpMode
     {
         switch(caseSwitch)
         {
+            //Delay timer
             case 0:
             {
                 if(robot.timer.time() > 0)
@@ -82,6 +83,7 @@ public class ShootRed extends OpMode
                 }
                 break;
             }
+            //Drive forward to shoot
             case 1:
             {
                 robot.setDrivePid();
@@ -92,13 +94,13 @@ public class ShootRed extends OpMode
 
             case 2:
             {
-                if(motor.driveWithEncoder(23, .5, "f"))
+                if(motor.driveWithEncoder(41, .5, "f"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-
+            //prepare to shoot
             case 3:
             {
                 robot.setAngleBackward();
@@ -107,7 +109,7 @@ public class ShootRed extends OpMode
                 caseSwitch++;
                 break;
             }
-
+            //Shoot after flywheel is fast enough
             case 4:
             {
                 if(robot.timer.time() > 2.3)
@@ -118,7 +120,7 @@ public class ShootRed extends OpMode
                 }
                 break;
             }
-
+            //Stop shooting
             case 5:
             {
                 if(robot.timer.time() > 6)
@@ -129,11 +131,11 @@ public class ShootRed extends OpMode
                 }
                 break;
             }
-
+            //Prepare turn and turn to ramp
             case 6:
             {
                 robot.setTurnPid();
-                motor.setPidDegrees(-65);
+                motor.setPidDegrees(115);
                 robot.run_using_encoder();
                 caseSwitch++;
                 break;
@@ -141,13 +143,13 @@ public class ShootRed extends OpMode
 
             case 7:
             {
-                if(motor.turn(.04, 0, .11))
+                if(motor.turn())
                 {
                     caseSwitch++;
                 }
                 break;
             }
-
+            //Pepare to drive and drive to ramp
             case 8:
             {
                 robot.setDrivePid();
@@ -160,7 +162,7 @@ public class ShootRed extends OpMode
 
             case 9:
             {
-                if(motor.driveWithEncoder(72, 1, "f"))
+                if(motor.driveWithEncoder(72, 1, "b"))
                 {
                     caseSwitch++;
                 }

@@ -75,6 +75,7 @@ public class ShootPlatform extends OpMode
     {
         switch(caseSwitch)
         {
+            //Saet up for a delay
             case 0:
             {
                 if(robot.timer.time() > 0)
@@ -83,6 +84,7 @@ public class ShootPlatform extends OpMode
                 }
                 break;
             }
+            //Set up for drive forward
             case 1:
             {
                 robot.setDrivePid();
@@ -90,25 +92,25 @@ public class ShootPlatform extends OpMode
                 caseSwitch++;
                 break;
             }
-
+            //Drive Forward 41 inches
             case 2:
             {
-                if(motor.driveWithEncoder(23, .5, "f"))
+                if(motor.driveWithEncoder(41, .5, "f"))
                 {
                     caseSwitch++;
                 }
                 break;
             }
-
+            //Get ready to shoot
             case 3:
             {
-                robot.setAngleBackward();
+                robot.angleAdjust.setPosition(.21);
                 robot.flyWheel.setPower(1);
                 robot.timer.reset();
                 caseSwitch++;
                 break;
             }
-
+            //After fly wheel speeds up fire
             case 4:
             {
                 if(robot.timer.time() > 2.3)
@@ -119,7 +121,7 @@ public class ShootPlatform extends OpMode
                 }
                 break;
             }
-
+            //Stop shooting
             case 5:
             {
                 if(robot.timer.time() > 6)
@@ -130,7 +132,7 @@ public class ShootPlatform extends OpMode
                 }
                 break;
             }
-
+            //get ready and drive onto platform
             case 6:
             {
                 robot.setDrivePid();
@@ -143,7 +145,7 @@ public class ShootPlatform extends OpMode
 
             case 7:
             {
-                if(motor.driveWithEncoder(25, 1, "f"))
+                if(motor.driveWithEncoder(13, 1, "f"))
                 {
                     caseSwitch++;
                 }

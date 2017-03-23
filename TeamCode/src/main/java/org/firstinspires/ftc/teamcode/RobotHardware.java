@@ -60,7 +60,7 @@ public class RobotHardware
     private final double TURN_YAW_PID_I = 0.0; //0.003
     private final double TURN_YAW_PID_D = 0.4;//0.02
 
-    private final double DRIVE_YAW_PID_P = 0.09;//.065
+    private final double DRIVE_YAW_PID_P = 0.065;//.065
     private final double DRIVE_YAW_PID_I = 0.0;
     private final double DRIVE_YAW_PID_D = 0.03;
 
@@ -131,7 +131,6 @@ public class RobotHardware
         lifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         stop_and_reset_encoder();
-
         flyWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -143,7 +142,7 @@ public class RobotHardware
         setButtonLeftInit();
         setAngleInit();
         setButtonPushInit();
-        blockDown();
+        blockUp();
         //setFeedInit();
 
         //******************************************************************************************
@@ -291,7 +290,7 @@ public class RobotHardware
 
     public void setAngleBackward()
     {
-        angleAdjust.setPosition(.23);
+        angleAdjust.setPosition(.26);
     }//.26
 
     public void setAngleButtonPress()
